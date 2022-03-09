@@ -1,0 +1,35 @@
+{
+	"name": "@tiger_chan/physics",
+	"version": "0.5.0",
+	"description": "Simple Collision Detection implementation for JavaScript",
+	"type": "module",
+	"main": "./src/index.js",
+	"types": "./types/index.d.ts",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/tiger-chan/physics-js.git"
+	},
+	"keywords": [
+		"collision",
+		"aabb",
+		"physics"
+	],
+	"devDependencies": {
+		"eslint": "^8.10.0"
+	},
+	"directories": {
+		"doc": "docs"
+	},
+	"engines": {
+		"node": ">=14.0.0"
+	},
+	"author": "Anthony Young",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/tiger-chan/physics-js/issues"
+	},
+	"homepage": "https://github.com/tiger-chan/physics-js#readme"
+}
