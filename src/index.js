@@ -1,7 +1,9 @@
 import * as MathHelpers from "./math";
-import * as Vec2 from "./vec2";
+import Vec2 from "./vec2";
+import Vec3 from "./vec3";
 
 export default {
-	...MathHelpers,
-	vec2: Vec2
+	MathEx: MathHelpers,
+	vec2: Vec2,
+	vec3: Vec3,
 };
