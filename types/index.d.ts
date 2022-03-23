@@ -364,16 +364,199 @@ declare namespace Physics {
 		export function equals(A: constVec3, B: constVec3, epsilon?: number): boolean;
 	}
 
-	export interface AABB {
+	export interface AABB<Vector> {
 		/**
 		 * Center point of bounding box
 		 */
-		center: vec2;
+		center: Vector;
 		/**
 		 * half width & height of bounding box
 		 */
-		extents: vec2;
+		extents: Vector;
 	};
+
+	export interface Ray<Vector> {
+		origin: Vector;
+		dir: Vector;
+		/**
+		 * Value is a a precomputed value of the inverse of the direction components
+		 * 
+		 * i.e. (1/x, 1/y, 1/z)
+		 */
+		invDir: Vector;
+	}
+
+	export interface HitResult<Vector> {
+		/**
+		 * The point of contact between the two objects
+		 * 
+		 * Note: an estimation in some sweep tests
+		 */
+		pos: Vector;
+
+		/**
+		 * the surface normal for the point of contact
+		 */
+		normal: Vector;
+
+		/**
+		 * The overlap between the objects.  Can be added to the moving object's position
+		 * to move it back just before the collision.
+		 */
+		delta: readonly Vector;
+	}
+
+	export module AABB2D {
+		type vector = vec2;
+		type AABB = Physics.AABB<vector>;
+		type Ray = Physics.Ray<vector>;
+		type HitResult = Physics.HitResult<vector>;
+		/**
+		 * Create new AABB with center and extents
+		 */
+		export function create(center: vector, extents: vector): AABB;
+		/**
+		 * Retreive the minimum value of the AABB
+		 */
+		export function min(aabb: AABB, dst?: vector): vector;
+		/**
+		 * Retreive the maximum value of the AABB
+		 */
+		export function max(aabb: AABB, dst?: vector): vector;
+		/**
+		 * Retreive the calculated width of the AABB
+		 */
+		export function width(aabb: AABB): number;
+		/**
+		 * Retreive the calculated height of the AABB
+		 */
+		export function height(aabb: AABB): number;
+		/**
+		 * Retreive the calculated size of the AABB
+		 */
+		export function size(aabb: AABB, dst?: vector): vector;
+
+		/**
+		 * Return the list of vertices of the AABB
+		 */
+		export function vertices(aabb: AABB, dst?: vector[]): vector[];
+
+		/**
+		 * Test if point is within the AABB
+		 * @param aabb
+		 * @param p
+		 * @returns HitResult with information about the intersection otherwise null
+		 */
+		export function intersectPoint(aabb: AABB, p: vector): HitResult | null;
+
+		/**
+		 * Test if line Ray intersects the AABB
+		 * @param aabb
+		 * @param s Ray
+		 * @returns HitResult with information about the intersection otherwise null
+		 */
+		export function intersectRay(aabb: AABB, s: Ray): HitResult | null;
+
+		/**
+		 * Test if point is within the AABB
+		 * @param aabb
+		 * @param p
+		 * @returns `true` if AABB contains the point, otherwise `false`
+		 */
+		export function overlapsPoint(aabb: AABB, p: vector): boolean;
+
+		/**
+		 * Test if line Ray intersects the AABB
+		 * @param aabb
+		 * @param s Ray
+		 * @returns `true` if AABB contains the point, otherwise `false`
+		 */
+		export function overlapsRay(aabb: AABB, s: Ray): boolean;
+	}
+	
+	export module AABB3D {
+		type vector = vec3;
+		type AABB = Physics.AABB<vector>;
+		type Ray = Physics.Ray<vector>;
+		type HitResult = Physics.HitResult<vector>;
+		/**
+		 * Create new AABB with center and extents
+		 */
+		export function create(center: vector, extents: vector): AABB;
+		/**
+		 * Retreive the minimum value of the AABB
+		 */
+		export function min(aabb: AABB, dst?: vector): vector;
+		/**
+		 * Retreive the maximum value of the AABB
+		 */
+		export function max(aabb: AABB, dst?: vector): vector;
+		/**
+		 * Retreive the calculated width of the AABB
+		 */
+		export function width(aabb: AABB): number;
+		/**
+		 * Retreive the calculated height of the AABB
+		 */
+		export function height(aabb: AABB): number;
+		/**
+		 * Retreive the calculated size of the AABB
+		 */
+		export function size(aabb: AABB, dst?: vector): vector;
+
+		/**
+		 * Return the list of vertices of the AABB
+		 */
+		export function vertices(aabb: AABB, dst?: vector[]): vector[];
+
+		/**
+		 * Test if point is within the AABB
+		 * @param aabb
+		 * @param p
+		 * @returns HitResult with information about the intersection otherwise null
+		 */
+		export function intersectPoint(aabb: AABB, p: vector): HitResult | null;
+
+		/**
+		 * Test if line Ray intersects the AABB
+		 * @param aabb
+		 * @param s Ray
+		 * @returns HitResult with information about the intersection otherwise null
+		 */
+		export function intersectRay(aabb: AABB, s: Ray): HitResult | null;
+
+		/**
+		 * Test if point is within the AABB
+		 * @param aabb
+		 * @param p
+		 * @returns `true` if AABB contains the point, otherwise `false`
+		 */
+		export function overlapsPoint(aabb: AABB, p: vector): boolean;
+
+		/**
+		 * Test if line Ray intersects the AABB
+		 * @param aabb
+		 * @param s Ray
+		 * @returns `true` if AABB contains the point, otherwise `false`
+		 */
+		export function overlapsRay(aabb: AABB, s: Ray): boolean;
+	}
+
+	type Simplex = any;
+	type ConvexShape = any;
+	export module Simplex {
+		export function minkowskiSum(s1: ConvexShape, s2: ConvexShape): Simplex;
+		export function minkowskiDiff(s1: ConvexShape, s2: ConvexShape): Simplex;
+	}
+
+	export module gjk {
+		/**
+		 * Returns test if the two shapes are colliding
+		 * @param s1 
+		 * @param s2 
+		 */
+		export function calculate(s1: ConvexShape, s2: ConvexShape): boolean;
+	}
 
 	export class HitResult {
 		/**
@@ -397,7 +580,7 @@ declare namespace Physics {
 
 	export class SweepHitResult extends HitResult {
 		/**
-		 * `[0.0, 1.0]` indicating where allong the segment or sweep the intersection occured.
+		 * `[0.0, 1.0]` indicating where allong the Ray or sweep the intersection occured.
 		 *
 		 * The `t` is the value for the line equation `L(t) = A + t(B - A)`
 		 */
@@ -414,7 +597,4 @@ declare namespace Physics {
 		 */
 		pos: vec2;
 	}
-
-	export function intersectPoint(aabb: AABB, point: vec2): HitResult | null;
-	export function intersectSegment(aabb: AABB, start: vec2, delta: constVec2, padding?: vec2): SweepHitResult | null;
 }
