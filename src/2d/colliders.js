@@ -1,6 +1,4 @@
-/// <reference path="../types/index.d.ts" />
-
-import * as vec2 from "./vec2";
+import * as vec2 from "../vec2";
 //import * as AABB from "./aabb";
 //import * as MathEx from "./math";
 

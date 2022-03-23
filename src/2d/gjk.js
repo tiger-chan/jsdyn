@@ -1,5 +1,5 @@
-import vec2 from "./vec2";
-import vec3 from "./vec3";
+import vec2 from "../vec2";
+import vec3 from "../vec3";
 
 function tripleProd(v1, v2, v3) {
 	let A = vec3.from(v1);

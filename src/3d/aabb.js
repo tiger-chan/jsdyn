@@ -1,4 +1,4 @@
-import * as vec3 from "./vec3";
+import * as vec3 from "../vec3";
 
 /**
  * @implements {Physics.AABB3D.AABB}
