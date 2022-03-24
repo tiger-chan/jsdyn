@@ -296,7 +296,7 @@ export function inverse(A, dst = create()) {
 export function normalize(A, dst = create()) {
 	let len = squaredLength(A);
 	if (len !== 0) {
-		len = 1.0 / len;
+		len = 1.0 / Math.sqrt(len);
 	}
 	dst[X] = A[X] * len;
 	dst[Y] = A[Y] * len;

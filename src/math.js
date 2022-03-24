@@ -8,3 +8,7 @@
 export function clamp(n, minimum, maximum) {
 	return Math.max(Math.min(n, maximum), minimum);
 }
+
+export default {
+	clamp
+};

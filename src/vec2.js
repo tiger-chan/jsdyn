@@ -1,8 +1,9 @@
-import vec3 from "./vec3";
+import vec3 from "./vec3.js";
+import MathEx from "./math.js";
 
 const X = 0;
 const Y = 1;
-const Z = 1;
+const Z = 2;
 // Vector Size
 const W = 2;
 
@@ -279,7 +280,7 @@ export function inverse(A, dst = create()) {
 export function normalize(A, dst = create()) {
 	let len = squaredLength(A);
 	if (len !== 0) {
-		len = 1.0 / len;
+		len = 1.0 / Math.sqrt(len);
 	}
 	dst[X] = A[X] * len;
 	dst[Y] = A[Y] * len;
@@ -345,7 +346,7 @@ export function random(s, dst = create()) {
 /**
  * Rotates `A` with origin `O` by `rad` returned in `dst`
  * @param {Physics.constVec2} A
- * @param {Physics.vec2} O
+ * @param {Physics.constVec2} O
  * @param {number} rad
  * @param {Physics.vec2} dst
  * @return {Physics.vec2}
@@ -367,9 +368,11 @@ export function rotate(A, O, rad, dst = create()) {
  * @returns {number}
  */
 export function angle(A, B) {
-	let dx = B[X] - A[X];
-	let dy = B[Y] - A[Y];
-	return Math.atan2(dy, dx);
+	let [x1, y1] = A;
+	let [x2, y2] = B;
+	let n = x1 * x2 + y1 * y2;
+	let d = length(A) * length(B);
+	return Math.acos(MathEx.clamp(n / d, -1, 1));
 }
 
 /**
