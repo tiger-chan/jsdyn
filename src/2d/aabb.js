@@ -280,10 +280,17 @@ export function nearestBoundPoint(aabb, p) {
 
 export default {
 	AABB,
+	create,
 	min,
 	max,
 	width,
+	height,
 	size,
+	vertices,
+	intersectPoint,
+	intersectRay,
+	overlapsPoint,
+	overlapsSegment,
 	minkowskiDiff,
 	nearestBoundPoint,
 };
