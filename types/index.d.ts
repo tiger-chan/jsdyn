@@ -10,9 +10,32 @@ declare namespace Physics {
 	export module MathEx {
 		// Clamp `n` between `min` and `max`
 		export function clamp(n: number, min: number, max: number): number;
+		/**
+		 * Numeric expressions to be evaluated.
+		 * 
+		 * @param x
+		 * @param y
+		 * @returns Returns the smaller of a set of supplied numeric expressions.
+		 */
+		export function max(x: number, y: number): number;
+		/**
+		 * Numeric expressions to be evaluated.
+		 * 
+		 * @param x
+		 * @param y
+		 * @returns Returns the larger of a set of supplied numeric expressions.
+		 */
+		export function min(x: number, y: number): number;
 	}
 
 	export module vec2 {
+		/**
+		 * Return the absolute value of the vector in dst
+		 * @param A
+		 * @param dst
+		 */
+		export function abs(A: constVec2, dst?: vec2): vec2;
+
 		/**
 		 * Create new vec2
 		 */
@@ -112,6 +135,13 @@ declare namespace Physics {
 		 * Returns the square magnitude of `A`
 		 */
 		export function squaredLength(A: constVec2): number;
+
+		/**
+		 * Returns the `trunc` of each component of `A` in `dst`
+		 * @param A
+		 * @param dst
+		 */
+		export function trunc(A: constVec2, dst?: vec2): vec2
 
 		/**
 		 * Returns the negative of `A` in `dst`
@@ -384,6 +414,14 @@ declare namespace Physics {
 		 * i.e. (1/x, 1/y, 1/z)
 		 */
 		invDir: Vector;
+		distance: number;
+	}
+
+	export module Ray2D {
+		type vector = vec2;
+		type Ray = Physics.Ray<vector>;
+
+		export function create(origin: vector, dir: vector, maxDistance?: number): Ray;
 	}
 
 	export interface HitResult<Vector> {

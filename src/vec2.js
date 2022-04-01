@@ -8,6 +8,18 @@ const Z = 2;
 const W = 2;
 
 /**
+ * Return the absolute value of the vector in dst
+ * @param {Physics.constVec2} A
+ * @param {Physics.vec2} dst
+ * @returns {Physics.vec2}
+ */
+export function abs(A, dst = create()) {
+	dst[X] = Math.abs(A[X]);
+	dst[Y] = Math.abs(A[Y]);
+	return dst;
+}
+
+/**
  * Create new vec2
  * @returns {Physics.vec2}
  */
@@ -203,6 +215,18 @@ export function scale(A, s, dst = create()) {
 export function scaleAndAdd(A, B, s, dst = create()) {
 	dst[X] = A[X] + B[X] * s;
 	dst[Y] = A[Y] + B[Y] * s;
+	return dst;
+}
+
+/**
+ * Returns the `trunc` of each component of `A` in `dst`
+ * @param {Physics.constVec2} A
+ * @param {Physics.vec2} dst
+ * @returns {Physics.vec2}
+ */
+export function trunc(A, dst = create()) {
+	dst[X] = Math.trunc(A[X]);
+	dst[Y] = Math.trunc(A[Y]);
 	return dst;
 }
 
@@ -416,7 +440,8 @@ export function equals(A, B, epsilon = 0.0001) {
 }
 
 export default {
-	add
+	abs
+	, add
 	, angle
 	, ceil
 	, clone
@@ -447,6 +472,7 @@ export default {
 	, squaredDistance
 	, squaredLength
 	, subtract
+	, trunc
 	, toString
 	, zero: zero
 };

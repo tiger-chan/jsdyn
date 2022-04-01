@@ -181,13 +181,13 @@ export function intersectRay(aabb, r) {
 	let ty2 = (maxY - ry) * r.invDir[1];
 
 	tmin = Math.max(tmin, Math.min(ty1, ty2));
-	tmax = Math.min(tmax, Math.min(ty1, ty2));
+	tmax = Math.min(tmax, Math.max(ty1, ty2));
 
 	let tz1 = (minZ - rz) * r.invDir[2];
 	let tz2 = (maxZ - rz) * r.invDir[2];
 
 	tmin = Math.max(tmin, Math.min(tz1, tz2));
-	tmax = Math.min(tmax, Math.min(tz1, tz2));
+	tmax = Math.min(tmax, Math.max(tz1, tz2));
 
 	if (tmax >= tmin) {
 		let t = tmin < 0 ? tmax : tmin;
@@ -244,13 +244,13 @@ export function overlapsSegment(aabb, r) {
 	let ty2 = (maxY - ry) * r.invDir[1];
 
 	tmin = Math.max(tmin, Math.min(ty1, ty2));
-	tmax = Math.min(tmax, Math.min(ty1, ty2));
+	tmax = Math.min(tmax, Math.max(ty1, ty2));
 
 	let tz1 = (minZ - rz) * r.invDir[2];
 	let tz2 = (maxZ - rz) * r.invDir[2];
 
 	tmin = Math.max(tmin, Math.min(tz1, tz2));
-	tmax = Math.min(tmax, Math.min(tz1, tz2));
+	tmax = Math.min(tmax, Math.max(tz1, tz2));
 
 	return tmax >= tmin;
 }

@@ -1,9 +1,10 @@
-import * as vec2 from "../vec2";
+import vec2 from "../vec2.js";
+import math from "../math.js";
 
 /**
- * @implements {Physics.AABB}
+ * @implements {Physics.AABB<Physics.vec2>}
  */
-class AABB {
+export class AABB {
 	/** @type {Physics.vec2} */
 	center;
 	/** @type {Physics.vec2} */
@@ -17,9 +18,9 @@ class AABB {
  * @returns {Physics.AABB}
  */
 export function create(center, extents) {
-	let aabb = new AABB;
-	vec2.copy(center, aabb.center);
-	vec2.copy(extents, aabb.extents);
+	let aabb = new AABB();
+	aabb.center = vec2.copy(center);
+	aabb.extents = vec2.copy(extents);
 	return aabb;
 }
 
@@ -100,11 +101,42 @@ export function vertices(aabb, dst = []) {
  */
 function intersectionNormal(aabb, point, dst = vec2.create()) {
 	// https://blog.johnnovak.net/2016/10/22/the-nim-ray-tracer-project-part-4-calculating-box-normals/
-	let dir = vec2.normalize(vec2.subtract(point, aabb.center));
-	let scaled = vec2.scale(vec2.divide(dir, aabb.extents, dst), 1.000001, dst);
-	scaled = vec2.floor(scaled, dst);
+	let p = vec2.subtract(point, aabb.center);
+	let d = vec2.scale(vec2.subtract(min(aabb), max(aabb)), 0.5);
+
+	let scaled = vec2.scale(vec2.divide(p, vec2.abs(d, d), dst), 1.000001, dst);
+	scaled = vec2.trunc(scaled, dst);
 	vec2.normalize(scaled, dst);
 	return dst;
+}
+
+/**
+ * Test if line Ray intersects the AABB
+ * @param {Physics.AABB2D.AABB} aabb
+ * @param {Physics.AABB2D.Ray} r
+ * @returns  {[number, number]} HitResult with information about the intersection otherwise null
+ */
+function getIntersectionRay(aabb, r) {
+	// https://tavianator.com/2011/ray_box.html
+	let aMin = min(aabb);
+	let aMax = max(aabb);
+
+
+	let t1 = (aMin[0] - r.origin[0]) * r.invDir[0];
+	let t2 = (aMax[0] - r.origin[0]) * r.invDir[0];
+
+	let tmin = math.min(t1, t2);
+	let tmax = math.max(t1, t2);
+
+	for (let i = 1; i < 2; ++i) {
+		t1 = (aMin[i] - r.origin[i]) * r.invDir[i];
+		t2 = (aMax[i] - r.origin[i]) * r.invDir[i];
+
+		tmin = math.max(tmin, math.min(math.min(t1, t2), tmax));
+		tmax = math.min(tmax, math.max(math.max(t1, t2), tmin));
+	}
+
+	return [tmin, tmax];
 }
 
 /**
@@ -129,7 +161,7 @@ export function intersectPoint(aabb, p) {
 		/** @type {Physics.AABB2D.HitResult} */
 		return {
 			pos: iP,
-			delta: iP,
+			delta: vec2.subtract(iP, p),
 			normal: intersectionNormal(aabb, iP)
 		};
 	}
@@ -144,23 +176,9 @@ export function intersectPoint(aabb, p) {
  * @returns  {Physics.AABB2D.HitResult | null} HitResult with information about the intersection otherwise null
  */
 export function intersectRay(aabb, r) {
-	let [minX, minY] = min(aabb);
-	let [maxX, maxY] = max(aabb);
-	let [rx, ry] = r.origin;
+	let [tmin, tmax] = getIntersectionRay(aabb, r);
 
-	let tx1 = (minX - rx) * r.invDir[0];
-	let tx2 = (maxX - rx) * r.invDir[0];
-
-	let tmin = Math.min(tx1, tx2);
-	let tmax = Math.max(tx1, tx2);
-
-	let ty1 = (minY - ry) * r.invDir[1];
-	let ty2 = (maxY - ry) * r.invDir[1];
-
-	tmin = Math.max(tmin, Math.min(ty1, ty2));
-	tmax = Math.min(tmax, Math.min(ty1, ty2));
-
-	if (tmax >= tmin) {
+	if (tmax > Math.max(tmin, 0.0)) {
 		let t = tmin < 0 ? tmax : tmin;
 		let delta = vec2.scale(r.dir, t);
 		// Intersection point
@@ -195,87 +213,13 @@ export function overlapsPoint(aabb, p) {
 /**
  * Test if point is within the AABB
  * @param {Physics.AABB2D.AABB} aabb
- * @param {Physics.AABB2D.Ray} r segment
+ * @param {Physics.AABB2D.Ray} r ray
  * @returns {boolean} `true` if AABB intersects the Ray, otherwise `false`
  */
-export function overlapsSegment(aabb, r) {
-	// https://tavianator.com/2011/ray_box.html
-	let [minX, minY] = min(aabb);
-	let [maxX, maxY] = max(aabb);
-	let [rx, ry] = r.origin;
+export function overlapsRay(aabb, r) {
+	const [tmin, tmax] = getIntersectionRay(aabb, r);
 
-	let tx1 = (minX - rx) * r.invDir[0];
-	let tx2 = (maxX - rx) * r.invDir[0];
-
-	let tmin = Math.min(tx1, tx2);
-	let tmax = Math.max(tx1, tx2);
-
-	let ty1 = (minY - ry) * r.invDir[1];
-	let ty2 = (maxY - ry) * r.invDir[1];
-
-	tmin = Math.max(tmin, Math.min(ty1, ty2));
-	tmax = Math.min(tmax, Math.min(ty1, ty2));
-
-	return tmax >= tmin;
-}
-
-/**
- * 
- * @param {Physics.AABB} lhs
- * @param {Physics.AABB} rhs
- * @returns {Physics.AABB}
- */
-export function minkowskiDiff(lhs, rhs) {
-	let lMin = min(lhs);
-	let rMax = min(rhs);
-
-	let topLeft = vec2.subtract(lMin, rMax);
-	let sz = vec2.add(size(lhs), size(rhs));
-
-	let extents = vec2.scale(sz, 0.5);
-	let aabb = {
-		center: vec2.add(topLeft, extents),
-		extents: extents
-	};
-
-	return aabb;
-}
-
-export function nearestBoundPoint(aabb, p) {
-	let minVec = min(aabb);
-	let maxVec = max(aabb);
-	let minDist = Math.abs(p[0] - minVec[0]);
-
-	let extentPoint = vec2.create(minVec[0], p[1]);
-
-	// Check if it's closer to the right edge
-	{
-		let dist = Math.abs(maxVec[0] - p[0]);
-		if (dist < minDist) {
-			minDist = dist;
-			extentPoint = vec2.create(maxVec[0], p[1]);
-		}
-	}
-
-	// Check if it's closer to the lower edge (assuming +y is down on screen)
-	{
-		let dist = Math.abs(maxVec[1] - p[1]);
-		if (dist < minDist) {
-			minDist = dist;
-			extentPoint = vec2.create(p[0], maxVec[1]);
-		}
-	}
-
-	// Check if it's closer to the upper edge (assuming +y is down on screen)
-	{
-		let dist = Math.abs(minVec[1] - p[1]);
-		if (dist < minDist) {
-			minDist = dist;
-			extentPoint = vec2.create(p[0], minVec[1]);
-		}
-	}
-
-	return extentPoint;
+	return tmax > Math.max(tmin, 0.0);
 }
 
 export default {
@@ -290,7 +234,5 @@ export default {
 	intersectPoint,
 	intersectRay,
 	overlapsPoint,
-	overlapsSegment,
-	minkowskiDiff,
-	nearestBoundPoint,
+	overlapsRay,
 };
