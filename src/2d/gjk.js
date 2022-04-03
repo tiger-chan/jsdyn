@@ -80,4 +80,6 @@ export function gjk(s1, s2) {
 	}
 }
 
-export default gjk;
+export default {
+	gjk
+}
