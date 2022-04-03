@@ -2,20 +2,21 @@ import vec3 from "../vec3.js";
 import math from "../math.js";
 
 /**
- * @implements {Physics.AABB3D.AABB}
+ * @implements {Physics.AABB<Physics.vec3>}
  */
-class AABB {
+export class AxisAlignedBoundingBox {
 	/** @type {Physics.vec3} */
 	center;
 	/** @type {Physics.vec3} */
 	extents;
 }
 
+export const AABB = AxisAlignedBoundingBox;
+
 /**
- * Create new AABB with center and extents
  * @param {Physics.vec3} center 
  * @param {Physics.vec3} extents 
- * @returns {Physics.AABB}
+ * @returns {Physics.AABB<Physics.vec3>}
  */
 export function create(center, extents) {
 	let aabb = new AABB();
@@ -25,8 +26,7 @@ export function create(center, extents) {
 }
 
 /**
- * Retreive the calculated depth of the AABB
- * @param {Physics.AABB} aabb
+ * @param {Physics.AABB<Physics.vec3>} aabb
  * @returns {number}
  */
 export function depth(aabb) {
@@ -34,8 +34,7 @@ export function depth(aabb) {
 }
 
 /**
- * Retreive the minimum value of the AABB
- * @param {Physics.AABB} aabb
+ * @param {Physics.AABB<Physics.vec3>} aabb
  * @param {Physics.vec3} dst
  * @returns {Physics.vec3}
  */
@@ -44,8 +43,7 @@ export function min(aabb, dst = vec3.create()) {
 }
 
 /**
- * Retreive the maximum values of the AABB
- * @param {Physics.AABB} aabb
+ * @param {Physics.AABB<Physics.vec3>} aabb
  * @param {Physics.vec3} dst
  * @returns {Physics.vec3}
  */
@@ -54,8 +52,7 @@ export function max(aabb, dst = vec3.create()) {
 }
 
 /**
- * Retreive the calculated width of the AABB
- * @param {Physics.AABB} aabb
+ * @param {Physics.AABB<Physics.vec3>} aabb
  * @returns {number}
  */
 export function width(aabb) {
@@ -63,8 +60,7 @@ export function width(aabb) {
 }
 
 /**
- * Retreive the calculated height of the AABB
- * @param {Physics.AABB} aabb
+ * @param {Physics.AABB<Physics.vec3>} aabb
  * @returns {number}
  */
 export function height(aabb) {
@@ -72,8 +68,7 @@ export function height(aabb) {
 }
 
 /**
- * Retreive the calculated size of the AABB
- * @param {Physics.AABB} aabb
+ * @param {Physics.AABB<Physics.vec3>} aabb
  * @param {Physics.vec3} dst
  * @returns {Physics.vec3}
  */
@@ -83,8 +78,7 @@ export function size(aabb, dst = vec3.create()) {
 }
 
 /**
- * Return the list of vertices of the AABB
- * @param {Physics.AABB} aabb
+ * @param {Physics.AABB<Physics.vec3>} aabb
  * @param {Physics.vec3[]} dst
  * @returns {Physics.vec3[]}
  */
@@ -115,7 +109,7 @@ export function vertices(aabb, dst = []) {
 
 /**
  * 
- * @param {Physics.AABB3D.AABB} aabb
+ * @param {Physics.AABB<Physics.vec3>} aabb
  * @param {Physics.vec3} point
  * @param {Physics.vec3} dst
  * @returns {Physics.vec3}
@@ -132,10 +126,9 @@ function intersectionNormal(aabb, point, dst = vec3.create()) {
 }
 
 /**
- * Test if line Ray intersects the AABB
- * @param {Physics.AABB3D.AABB} aabb
- * @param {Physics.AABB3D.Ray} r
- * @returns  {[number, number]} HitResult with information about the intersection otherwise null
+ * @param {Physics.AABB<Physics.vec3>} aabb
+ * @param {Physics.Ray<Physics.vec3>} r
+ * @returns  {[number, number]} [tmin, tmax]
  */
 function getIntersectionRay(aabb, r) {
 	// https://tavianator.com/2011/ray_box.html
@@ -161,10 +154,9 @@ function getIntersectionRay(aabb, r) {
 }
 
 /**
- * Test if point is within the AABB
- * @param {Physics.AABB3D.AABB} aabb
- * @param {Physics.AABB3D.vector} p
- * @returns  {Physics.AABB3D.HitResult | null} HitResult with information about the intersection otherwise null
+ * @param {Physics.AABB<Physics.vec3>} aabb
+ * @param {Physics.vec3} p
+ * @returns  {Physics.HitResult<Physics.vec3> | null}
  */
 export function intersectPoint(aabb, p) {
 	if (overlapsPoint(aabb, p)) {
@@ -172,7 +164,7 @@ export function intersectPoint(aabb, p) {
 
 		let iP = vec3.add(aabb.center, vec3.multiply(aabb.extents, dir));
 
-		/** @type {Physics.AABB3D.HitResult} */
+		/** @type {Physics.HitResult<Physics.vec3>} */
 		return {
 			pos: iP,
 			delta: vec3.subtract(iP, p),
@@ -184,10 +176,9 @@ export function intersectPoint(aabb, p) {
 }
 
 /**
- * Test if line Ray intersects the AABB
- * @param {Physics.AABB3D.AABB} aabb
- * @param {Physics.AABB3D.Ray} r
- * @returns  {Physics.AABB3D.HitResult | null} HitResult with information about the intersection otherwise null
+ * @param {Physics.AABB<Physics.vec3>} aabb
+ * @param {Physics.Ray<Physics.vec3>} r
+ * @returns  {Physics.HitResult<Physics.vec3> | null}
  */
 export function intersectRay(aabb, r) {
 	let [tmin, tmax] = getIntersectionRay(aabb, r);
@@ -198,7 +189,7 @@ export function intersectRay(aabb, r) {
 		// Intersection point
 		let iP = vec3.add(r.origin, delta);
 
-		/** @type {Physics.AABB3D.HitResult} */
+		/** @type {Physics.HitResult<Physics.vec3>} */
 		return {
 			pos: iP,
 			delta: delta,
@@ -210,10 +201,9 @@ export function intersectRay(aabb, r) {
 }
 
 /**
- * Test if point is within the AABB
- * @param {Physics.AABB3D.AABB} aabb
- * @param {Physics.AABB3D.vector} p
- * @returns {boolean} `true` if AABB contains the point, otherwise `false`
+ * @param {Physics.AABB<Physics.vec3>} aabb
+ * @param {Physics.vec3} p
+ * @returns {boolean}
  */
 export function overlapsPoint(aabb, p) {
 	let [x1, y1, z1] = min(aabb);
@@ -226,10 +216,9 @@ export function overlapsPoint(aabb, p) {
 }
 
 /**
- * Test if point is within the AABB
- * @param {Physics.AABB3D.AABB} aabb
- * @param {Physics.AABB3D.Ray} r ray
- * @returns {boolean} `true` if AABB intersects the Ray, otherwise `false`
+ * @param {Physics.AABB<Physics.vec3>} aabb
+ * @param {Physics.Ray<Physics.vec3>} r ray
+ * @returns {boolean}
  */
 export function overlapsRay(aabb, r) {
 	const [tmin, tmax] = getIntersectionRay(aabb, r);
@@ -238,17 +227,18 @@ export function overlapsRay(aabb, r) {
 }
 
 export default {
-	AABB,
-	depth,
-	create,
-	min,
-	max,
-	width,
-	height,
-	size,
-	vertices,
-	intersectPoint,
-	intersectRay,
-	overlapsPoint,
-	overlapsRay,
+	AABB
+	, AxisAlignedBoundingBox
+	, create
+	, depth
+	, min
+	, max
+	, width
+	, height
+	, size
+	, vertices
+	, intersectPoint
+	, intersectRay
+	, overlapsPoint
+	, overlapsRay
 };

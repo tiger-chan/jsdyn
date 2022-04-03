@@ -4,18 +4,19 @@ import math from "../math.js";
 /**
  * @implements {Physics.AABB<Physics.vec2>}
  */
-export class AABB {
+export class AxisAlignedBoundingBox {
 	/** @type {Physics.vec2} */
 	center;
 	/** @type {Physics.vec2} */
 	extents;
 }
 
+export const AABB = AxisAlignedBoundingBox;
+
 /**
- * Create new AABB with center and extents
  * @param {Physics.vec2} center 
  * @param {Physics.vec2} extents 
- * @returns {Physics.AABB}
+ * @returns {Physics.AABB<Physics.vec2>}
  */
 export function create(center, extents) {
 	let aabb = new AABB();
@@ -25,8 +26,7 @@ export function create(center, extents) {
 }
 
 /**
- * Retreive the minimum value of the AABB
- * @param {Physics.AABB} aabb
+ * @param {Physics.AABB<Physics.vec2>} aabb
  * @param {Physics.vec2} dst
  * @returns {Physics.vec2}
  */
@@ -35,8 +35,7 @@ export function min(aabb, dst = vec2.create()) {
 }
 
 /**
- * Retreive the maximum values of the AABB
- * @param {Physics.AABB} aabb
+ * @param {Physics.AABB<Physics.vec2>} aabb
  * @param {Physics.vec2} dst
  * @returns {Physics.vec2}
  */
@@ -45,8 +44,7 @@ export function max(aabb, dst = vec2.create()) {
 }
 
 /**
- * Retreive the calculated width of the AABB
- * @param {Physics.AABB} aabb
+ * @param {Physics.AABB<Physics.vec2>} aabb
  * @returns {number}
  */
 export function width(aabb) {
@@ -54,8 +52,7 @@ export function width(aabb) {
 }
 
 /**
- * Retreive the calculated height of the AABB
- * @param {Physics.AABB} aabb
+ * @param {Physics.AABB<Physics.vec2>} aabb
  * @returns {number}
  */
 export function height(aabb) {
@@ -63,8 +60,7 @@ export function height(aabb) {
 }
 
 /**
- * Retreive the calculated size of the AABB
- * @param {Physics.AABB} aabb
+ * @param {Physics.AABB<Physics.vec2>} aabb
  * @param {Physics.vec2} dst
  * @returns {Physics.vec2}
  */
@@ -74,8 +70,7 @@ export function size(aabb, dst = vec2.create()) {
 }
 
 /**
- * Return the list of vertices of the AABB
- * @param {Physics.AABB} aabb
+ * @param {Physics.AABB<Physics.vec2>} aabb
  * @param {Physics.vec2[]} dst
  * @returns {Physics.vec2[]}
  */
@@ -94,7 +89,7 @@ export function vertices(aabb, dst = []) {
 
 /**
  * 
- * @param {Physics.AABB2D.AABB} aabb
+ * @param {Physics.AABB<Physics.vec2>} aabb
  * @param {Physics.vec2} point
  * @param {Physics.vec2} dst
  * @returns {Physics.vec2}
@@ -111,10 +106,9 @@ function intersectionNormal(aabb, point, dst = vec2.create()) {
 }
 
 /**
- * Test if line Ray intersects the AABB
- * @param {Physics.AABB2D.AABB} aabb
- * @param {Physics.AABB2D.Ray} r
- * @returns  {[number, number]} HitResult with information about the intersection otherwise null
+ * @param {Physics.AABB<Physics.vec2>} aabb
+ * @param {Physics.Ray<Physics.vec2>} r
+ * @returns  {[number, number]} [t_min, t_max]
  */
 function getIntersectionRay(aabb, r) {
 	// https://tavianator.com/2011/ray_box.html
@@ -140,10 +134,9 @@ function getIntersectionRay(aabb, r) {
 }
 
 /**
- * Test if point is within the AABB
- * @param {Physics.AABB2D.AABB} aabb
- * @param {Physics.AABB2D.vector} p
- * @returns  {Physics.AABB2D.HitResult | null} HitResult with information about the intersection otherwise null
+ * @param {Physics.AABB<Physics.vec2>} aabb
+ * @param {Physics.vec2} p
+ * @returns  {Physics.HitResult<Physics.vec2> | null}
  */
 export function intersectPoint(aabb, p) {
 	if (overlapsPoint(aabb, p)) {
@@ -151,7 +144,7 @@ export function intersectPoint(aabb, p) {
 
 		let iP = vec2.add(aabb.center, vec2.multiply(aabb.extents, dir));
 
-		/** @type {Physics.AABB2D.HitResult} */
+		/** @type {Physics.HitResult<Physics.vec2>} */
 		return {
 			pos: iP,
 			delta: vec2.subtract(iP, p),
@@ -163,10 +156,9 @@ export function intersectPoint(aabb, p) {
 }
 
 /**
- * Test if line Ray intersects the AABB
- * @param {Physics.AABB2D.AABB} aabb
- * @param {Physics.AABB2D.Ray} r
- * @returns  {Physics.AABB2D.HitResult | null} HitResult with information about the intersection otherwise null
+ * @param {Physics.AABB<Physics.vec2>} aabb
+ * @param {Physics.Ray<Physics.vec2>} r
+ * @returns  {Physics.HitResult<Physics.vec2> | null}
  */
 export function intersectRay(aabb, r) {
 	let [tmin, tmax] = getIntersectionRay(aabb, r);
@@ -177,7 +169,7 @@ export function intersectRay(aabb, r) {
 		// Intersection point
 		let iP = vec2.add(r.origin, delta);
 
-		/** @type {Physics.AABB2D.HitResult} */
+		/** @type {Physics.HitResult<Physics.vec2>} */
 		return {
 			pos: iP,
 			delta: delta,
@@ -189,10 +181,9 @@ export function intersectRay(aabb, r) {
 }
 
 /**
- * Test if point is within the AABB
- * @param {Physics.AABB2D.AABB} aabb
- * @param {Physics.AABB2D.vector} p
- * @returns {boolean} `true` if AABB contains the point, otherwise `false`
+ * @param {Physics.AABB<Physics.vec2>} aabb
+ * @param {Physics.vec2} p
+ * @returns {boolean}
  */
 export function overlapsPoint(aabb, p) {
 	let [x1, y1] = min(aabb);
@@ -204,10 +195,9 @@ export function overlapsPoint(aabb, p) {
 }
 
 /**
- * Test if point is within the AABB
- * @param {Physics.AABB2D.AABB} aabb
- * @param {Physics.AABB2D.Ray} r ray
- * @returns {boolean} `true` if AABB intersects the Ray, otherwise `false`
+ * @param {Physics.AABB<Physics.vec2>} aabb
+ * @param {Physics.Ray<Physics.vec2>} r
+ * @returns {boolean}
  */
 export function overlapsRay(aabb, r) {
 	const [tmin, tmax] = getIntersectionRay(aabb, r);
@@ -216,16 +206,17 @@ export function overlapsRay(aabb, r) {
 }
 
 export default {
-	AABB,
-	create,
-	min,
-	max,
-	width,
-	height,
-	size,
-	vertices,
-	intersectPoint,
-	intersectRay,
-	overlapsPoint,
-	overlapsRay,
+	AABB
+	, AxisAlignedBoundingBox
+	, create
+	, min
+	, max
+	, width
+	, height
+	, size
+	, vertices
+	, intersectPoint
+	, intersectRay
+	, overlapsPoint
+	, overlapsRay
 };

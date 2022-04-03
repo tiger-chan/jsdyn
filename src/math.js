@@ -32,7 +32,7 @@ export function min(x, y) {
 }
 
 export default {
-	clamp,
-	max,
-	min,
+	clamp
+	, max
+	, min
 };

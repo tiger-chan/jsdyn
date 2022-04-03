@@ -15,10 +15,10 @@ export class Ray {
 }
 
 /**
- * @param {Physics.Ray3D.vector} origin
- * @param {Physics.Ray3D.vector} dir
+ * @param {Physics.ray3.vector} origin
+ * @param {Physics.ray3.vector} dir
  * @param {number} maxDistance
- * @returns {Physics.Ray3D.Ray}
+ * @returns {Physics.ray3.Ray}
  */
 export function create(origin, dir, maxDistance = Number.MAX_SAFE_INTEGER) {
 	let ray = new Ray();
@@ -30,6 +30,6 @@ export function create(origin, dir, maxDistance = Number.MAX_SAFE_INTEGER) {
 }
 
 export default {
-	create,
-	Ray
+	create
+	, Ray
 };

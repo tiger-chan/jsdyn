@@ -1,13 +1,17 @@
 export = Physics;
 export as namespace Physics;
 export default Physics;
+
+type Tuple<T, N extends number> = N extends N ? number extends N ? T[] : _TupleOf<T, N, []> : never;
+type _TupleOf<T, N extends number, R extends unknown[]> = R['length'] extends N ? R : _TupleOf<T, N, [T, ...R]>;
+
 declare namespace Physics {
 	export type vec2 = [number, number];
 	export type constVec2 = readonly [number, number];
 	export type vec3 = [number, number, number];
 	export type constVec3 = readonly [number, number, number];
 
-	export module MathEx {
+	export module math {
 		// Clamp `n` between `min` and `max`
 		export function clamp(n: number, min: number, max: number): number;
 		/**
@@ -408,7 +412,7 @@ declare namespace Physics {
 		export function equals(A: constVec3, B: constVec3, epsilon?: number): boolean;
 	}
 
-	export interface AABB<Vector> {
+	export interface AxisAlignedBoundingBox<Vector> {
 		/**
 		 * Center point of bounding box
 		 */
@@ -418,6 +422,8 @@ declare namespace Physics {
 		 */
 		extents: Vector;
 	};
+
+	export type AABB<Vector> = AxisAlignedBoundingBox<Vector>;
 
 	export interface Ray<Vector> {
 		origin: Vector;
@@ -429,20 +435,6 @@ declare namespace Physics {
 		 */
 		invDir: Vector;
 		distance: number;
-	}
-
-	export module Ray2D {
-		type vector = vec2;
-		type Ray = Physics.Ray<vector>;
-
-		export function create(origin: vector, dir: vector, maxDistance?: number): Ray;
-	}
-
-	export module Ray3D {
-		type vector = vec3;
-		type Ray = Physics.Ray<vector>;
-
-		export function create(origin: vector, dir: vector, maxDistance?: number): Ray;
 	}
 
 	export interface HitResult<Vector> {
@@ -465,9 +457,10 @@ declare namespace Physics {
 		delta: readonly Vector;
 	}
 
-	export module AABB2D {
+	export module aabb2 {
 		type vector = vec2;
-		type AABB = Physics.AABB<vector>;
+		export type AxisAlignedBoundingBox = Physics.AxisAlignedBoundingBox<vector>;
+		export type AABB = Physics.AABB<vector>;
 		type Ray = Physics.Ray<vector>;
 		type HitResult = Physics.HitResult<vector>;
 		/**
@@ -533,9 +526,10 @@ declare namespace Physics {
 		export function overlapsRay(aabb: AABB, s: Ray): boolean;
 	}
 
-	export module AABB3D {
+	export module aabb3 {
 		type vector = vec3;
-		type AABB = Physics.AABB<vector>;
+		export type AxisAlignedBoundingBox = Physics.AxisAlignedBoundingBox<vector>;
+		export type AABB = Physics.AABB<vector>;
 		type Ray = Physics.Ray<vector>;
 		type HitResult = Physics.HitResult<vector>;
 		/**
@@ -605,59 +599,44 @@ declare namespace Physics {
 		export function overlapsRay(aabb: AABB, s: Ray): boolean;
 	}
 
-	type Simplex = any;
-	type ConvexShape = any;
-	export module Simplex {
-		export function minkowskiSum(s1: ConvexShape, s2: ConvexShape): Simplex;
-		export function minkowskiDiff(s1: ConvexShape, s2: ConvexShape): Simplex;
+	export module ray2 {
+		type vector = vec2;
+		export type Ray = Physics.Ray<vector>;
+
+		export function create(origin: vector, dir: vector, maxDistance?: number): Ray;
 	}
 
-	export module gjk {
+	export module ray3 {
+		type vector = vec3;
+		export type Ray = Physics.Ray<vector>;
+
+		export function create(origin: vector, dir: vector, maxDistance?: number): Ray;
+	}
+
+	type Simplex<T extends number> = Tuple<number, T>;
+
+	export interface ConvexShape<Vector> {
+		center: Vector;
+		verticies(): Vector[];
+	}
+
+	export module gjk2 {
+		type Simplex2 = Tuple<vec2, 3>
 		/**
 		 * Returns test if the two shapes are colliding
-		 * @param s1 
-		 * @param s2 
+		 * @param s1
+		 * @param s2
 		 */
-		export function calculate(s1: ConvexShape, s2: ConvexShape): boolean;
+		export function calculate(s1: ConvexShape<vec2>, s2: ConvexShape<vec2>): boolean;
 	}
 
-	export class HitResult {
+	export module gjk3 {
+		type Simplex3 = Tuple<vec3, 4>
 		/**
-		 * The point of contact between the two objects
-		 * 
-		 * Note: an estimation in some sweep tests
+		 * Returns test if the two shapes are colliding
+		 * @param s1
+		 * @param s2
 		 */
-		pos: vec2;
-
-		/**
-		 * the surface normal for the point of contact
-		 */
-		normal: vec2;
-
-		/**
-		 * The overlap between the objects.  Can be added to the moving object's position
-		 * to move it back just before the collision.
-		 */
-		delta: constVec2;
-	}
-
-	export class SweepHitResult extends HitResult {
-		/**
-		 * `[0.0, 1.0]` indicating where allong the Ray or sweep the intersection occured.
-		 *
-		 * The `t` is the value for the line equation `L(t) = A + t(B - A)`
-		 */
-		time: number;
-	}
-
-	export class SweepResult {
-		/**
-		 * `null` if there was no collision, Information on collision otherwise.
-		 */
-		hit: SweepHitResult | null;
-		/**
-		 * Final point on the path that could be reached without collision
-		 */
-		pos: vec2;
+		export function calculate(s1: ConvexShape<vec3>, s2: ConvexShape<vec3>): boolean;
 	}
 }
