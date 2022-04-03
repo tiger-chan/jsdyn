@@ -146,14 +146,7 @@ function getIntersectionRay(aabb, r) {
  * @returns  {Physics.AABB2D.HitResult | null} HitResult with information about the intersection otherwise null
  */
 export function intersectPoint(aabb, p) {
-	let [x1, y1] = min(aabb);
-	let [x2, y2] = max(aabb);
-	let [x, y] = p;
-
-	let intersects = (x1 <= x && x <= x2)
-		&& (y1 <= y && y <= y2);
-
-	if (intersects) {
+	if (overlapsPoint(aabb, p)) {
 		let dir = vec2.normalize(vec2.subtract(p, aabb.center));
 
 		let iP = vec2.add(aabb.center, vec2.multiply(aabb.extents, dir));

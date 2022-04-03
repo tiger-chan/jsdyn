@@ -1,4 +1,5 @@
-import * as vec3 from "../vec3";
+import vec3 from "../vec3.js";
+import math from "../math.js";
 
 /**
  * @implements {Physics.AABB3D.AABB}
@@ -17,10 +18,19 @@ class AABB {
  * @returns {Physics.AABB}
  */
 export function create(center, extents) {
-	let aabb = new AABB;
-	vec3.copy(center, aabb.center);
-	vec3.copy(extents, aabb.extents);
+	let aabb = new AABB();
+	aabb.center = vec3.copy(center);
+	aabb.extents = vec3.copy(extents);
 	return aabb;
+}
+
+/**
+ * Retreive the calculated depth of the AABB
+ * @param {Physics.AABB} aabb
+ * @returns {number}
+ */
+export function depth(aabb) {
+	return aabb.extents[2] + aabb.extents[2];
 }
 
 /**
@@ -59,15 +69,6 @@ export function width(aabb) {
  */
 export function height(aabb) {
 	return aabb.extents[1] + aabb.extents[1];
-}
-
-/**
- * Retreive the calculated height of the AABB
- * @param {Physics.AABB} aabb
- * @returns {number}
- */
-export function depth(aabb) {
-	return aabb.extents[2] + aabb.extents[2];
 }
 
 /**
@@ -121,11 +122,42 @@ export function vertices(aabb, dst = []) {
  */
 function intersectionNormal(aabb, point, dst = vec3.create()) {
 	// https://blog.johnnovak.net/2016/10/22/the-nim-ray-tracer-project-part-4-calculating-box-normals/
-	let dir = vec3.normalize(vec3.subtract(point, aabb.center));
-	let scaled = vec3.scale(vec3.divide(dir, aabb.extents, dst), 1.000001, dst);
-	scaled = vec3.floor(scaled, dst);
+	let p = vec3.subtract(point, aabb.center);
+	let d = vec3.scale(vec3.subtract(min(aabb), max(aabb)), 0.5);
+
+	let scaled = vec3.scale(vec3.divide(p, vec3.abs(d, d), dst), 1.000001, dst);
+	scaled = vec3.trunc(scaled, dst);
 	vec3.normalize(scaled, dst);
 	return dst;
+}
+
+/**
+ * Test if line Ray intersects the AABB
+ * @param {Physics.AABB3D.AABB} aabb
+ * @param {Physics.AABB3D.Ray} r
+ * @returns  {[number, number]} HitResult with information about the intersection otherwise null
+ */
+function getIntersectionRay(aabb, r) {
+	// https://tavianator.com/2011/ray_box.html
+	let aMin = min(aabb);
+	let aMax = max(aabb);
+
+
+	let t1 = (aMin[0] - r.origin[0]) * r.invDir[0];
+	let t2 = (aMax[0] - r.origin[0]) * r.invDir[0];
+
+	let tmin = math.min(t1, t2);
+	let tmax = math.max(t1, t2);
+
+	for (let i = 1; i < 3; ++i) {
+		t1 = (aMin[i] - r.origin[i]) * r.invDir[i];
+		t2 = (aMax[i] - r.origin[i]) * r.invDir[i];
+
+		tmin = math.max(tmin, math.min(math.min(t1, t2), tmax));
+		tmax = math.min(tmax, math.max(math.max(t1, t2), tmin));
+	}
+
+	return [tmin, tmax];
 }
 
 /**
@@ -135,15 +167,7 @@ function intersectionNormal(aabb, point, dst = vec3.create()) {
  * @returns  {Physics.AABB3D.HitResult | null} HitResult with information about the intersection otherwise null
  */
 export function intersectPoint(aabb, p) {
-	let [x1, y1, z1] = min(aabb);
-	let [x2, y2, z2] = max(aabb);
-	let [x, y, z] = p;
-
-	let intersects = (x1 <= x && x <= x2)
-		&& (y1 <= y && y <= y2)
-		&& (z1 <= z && z <= z2);
-
-	if (intersects) {
+	if (overlapsPoint(aabb, p)) {
 		let dir = vec3.normalize(vec3.subtract(p, aabb.center));
 
 		let iP = vec3.add(aabb.center, vec3.multiply(aabb.extents, dir));
@@ -151,7 +175,7 @@ export function intersectPoint(aabb, p) {
 		/** @type {Physics.AABB3D.HitResult} */
 		return {
 			pos: iP,
-			delta: iP,
+			delta: vec3.subtract(iP, p),
 			normal: intersectionNormal(aabb, iP)
 		};
 	}
@@ -166,30 +190,9 @@ export function intersectPoint(aabb, p) {
  * @returns  {Physics.AABB3D.HitResult | null} HitResult with information about the intersection otherwise null
  */
 export function intersectRay(aabb, r) {
-	// https://tavianator.com/2011/ray_box.html
-	let [minX, minY, minZ] = min(aabb);
-	let [maxX, maxY, maxZ] = max(aabb);
-	let [rx, ry, rz] = r.origin;
+	let [tmin, tmax] = getIntersectionRay(aabb, r);
 
-	let tx1 = (minX - rx) * r.invDir[0];
-	let tx2 = (maxX - rx) * r.invDir[0];
-
-	let tmin = Math.min(tx1, tx2);
-	let tmax = Math.max(tx1, tx2);
-
-	let ty1 = (minY - ry) * r.invDir[1];
-	let ty2 = (maxY - ry) * r.invDir[1];
-
-	tmin = Math.max(tmin, Math.min(ty1, ty2));
-	tmax = Math.min(tmax, Math.max(ty1, ty2));
-
-	let tz1 = (minZ - rz) * r.invDir[2];
-	let tz2 = (maxZ - rz) * r.invDir[2];
-
-	tmin = Math.max(tmin, Math.min(tz1, tz2));
-	tmax = Math.min(tmax, Math.max(tz1, tz2));
-
-	if (tmax >= tmin) {
+	if (tmax > Math.max(tmin, 0.0)) {
 		let t = tmin < 0 ? tmax : tmin;
 		let delta = vec3.scale(r.dir, t);
 		// Intersection point
@@ -225,97 +228,18 @@ export function overlapsPoint(aabb, p) {
 /**
  * Test if point is within the AABB
  * @param {Physics.AABB3D.AABB} aabb
- * @param {Physics.AABB3D.Ray} r segment
+ * @param {Physics.AABB3D.Ray} r ray
  * @returns {boolean} `true` if AABB intersects the Ray, otherwise `false`
  */
-export function overlapsSegment(aabb, r) {
-	// https://tavianator.com/2011/ray_box.html
-	let [minX, minY, minZ] = min(aabb);
-	let [maxX, maxY, maxZ] = max(aabb);
-	let [rx, ry, rz] = r.origin;
+export function overlapsRay(aabb, r) {
+	const [tmin, tmax] = getIntersectionRay(aabb, r);
 
-	let tx1 = (minX - rx) * r.invDir[0];
-	let tx2 = (maxX - rx) * r.invDir[0];
-
-	let tmin = Math.min(tx1, tx2);
-	let tmax = Math.max(tx1, tx2);
-
-	let ty1 = (minY - ry) * r.invDir[1];
-	let ty2 = (maxY - ry) * r.invDir[1];
-
-	tmin = Math.max(tmin, Math.min(ty1, ty2));
-	tmax = Math.min(tmax, Math.max(ty1, ty2));
-
-	let tz1 = (minZ - rz) * r.invDir[2];
-	let tz2 = (maxZ - rz) * r.invDir[2];
-
-	tmin = Math.max(tmin, Math.min(tz1, tz2));
-	tmax = Math.min(tmax, Math.max(tz1, tz2));
-
-	return tmax >= tmin;
-}
-
-/**
- * 
- * @param {Physics.AABB} lhs
- * @param {Physics.AABB} rhs
- * @returns {Physics.AABB}
- */
-export function minkowskiDiff(lhs, rhs) {
-	let lMin = min(lhs);
-	let rMax = min(rhs);
-
-	let topLeft = vec3.subtract(lMin, rMax);
-	let sz = vec3.add(size(lhs), size(rhs));
-
-	let extents = vec3.scale(sz, 0.5);
-	let aabb = {
-		center: vec3.add(topLeft, extents),
-		extents: extents
-	};
-
-	return aabb;
-}
-
-export function nearestBoundPoint(aabb, p) {
-	let minVec = min(aabb);
-	let maxVec = max(aabb);
-	let minDist = Math.abs(p[0] - minVec[0]);
-
-	let extentPoint = vec3.create(minVec[0], p[1]);
-
-	// Check if it's closer to the right edge
-	{
-		let dist = Math.abs(maxVec[0] - p[0]);
-		if (dist < minDist) {
-			minDist = dist;
-			extentPoint = vec3.create(maxVec[0], p[1]);
-		}
-	}
-
-	// Check if it's closer to the lower edge (assuming +y is down on screen)
-	{
-		let dist = Math.abs(maxVec[1] - p[1]);
-		if (dist < minDist) {
-			minDist = dist;
-			extentPoint = vec3.create(p[0], maxVec[1]);
-		}
-	}
-
-	// Check if it's closer to the upper edge (assuming +y is down on screen)
-	{
-		let dist = Math.abs(minVec[1] - p[1]);
-		if (dist < minDist) {
-			minDist = dist;
-			extentPoint = vec3.create(p[0], minVec[1]);
-		}
-	}
-
-	return extentPoint;
+	return tmax > Math.max(tmin, 0.0);
 }
 
 export default {
 	AABB,
+	depth,
 	create,
 	min,
 	max,
@@ -326,7 +250,5 @@ export default {
 	intersectPoint,
 	intersectRay,
 	overlapsPoint,
-	overlapsSegment,
-	minkowskiDiff,
-	nearestBoundPoint,
+	overlapsRay,
 };

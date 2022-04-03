@@ -141,7 +141,7 @@ declare namespace Physics {
 		 * @param A
 		 * @param dst
 		 */
-		export function trunc(A: constVec2, dst?: vec2): vec2
+		export function trunc(A: constVec2, dst?: vec2): vec2;
 
 		/**
 		 * Returns the negative of `A` in `dst`
@@ -214,6 +214,13 @@ declare namespace Physics {
 	}
 
 	export module vec3 {
+		/**
+		 * Return the absolute value of the vector in dst
+		 * @param A
+		 * @param dst
+		 */
+		export function abs(A: constVec3, dst?: vec3): vec3;
+
 		/**
 		 * Create new vec3
 		 */
@@ -303,6 +310,13 @@ declare namespace Physics {
 		 * Returns the square distnace between `A` and `B`
 		 */
 		export function squaredDistance(A: constVec3, B: constVec3): number;
+
+		/**
+		 * Returns the `trunc` of each component of `A` in `dst`
+		 * @param A
+		 * @param dst
+		 */
+		export function trunc(A: constVec3, dst?: vec3): vec3;
 
 		/**
 		 * Returns the magnitude of `A`
@@ -424,6 +438,13 @@ declare namespace Physics {
 		export function create(origin: vector, dir: vector, maxDistance?: number): Ray;
 	}
 
+	export module Ray3D {
+		type vector = vec3;
+		type Ray = Physics.Ray<vector>;
+
+		export function create(origin: vector, dir: vector, maxDistance?: number): Ray;
+	}
+
 	export interface HitResult<Vector> {
 		/**
 		 * The point of contact between the two objects
@@ -511,7 +532,7 @@ declare namespace Physics {
 		 */
 		export function overlapsRay(aabb: AABB, s: Ray): boolean;
 	}
-	
+
 	export module AABB3D {
 		type vector = vec3;
 		type AABB = Physics.AABB<vector>;
@@ -529,6 +550,10 @@ declare namespace Physics {
 		 * Retreive the maximum value of the AABB
 		 */
 		export function max(aabb: AABB, dst?: vector): vector;
+		/**
+		 * Retreive the calculated depth of the AABB
+		 */
+		export function depth(aabb: AABB): number;
 		/**
 		 * Retreive the calculated width of the AABB
 		 */

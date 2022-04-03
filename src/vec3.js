@@ -1,9 +1,24 @@
+import MathEx from "./math.js";
+
 const X = 0;
 const Y = 1;
 const Z = 2;
 
 // Vector Size
 const W = 3;
+
+/**
+ * Return the absolute value of the vector in dst
+ * @param {Physics.constVec3} A
+ * @param {Physics.vec3} dst
+ * @returns {Physics.vec3}
+ */
+export function abs(A, dst = create()) {
+	dst[X] = Math.abs(A[X]);
+	dst[Y] = Math.abs(A[Y]);
+	dst[Z] = Math.abs(A[Z]);
+	return dst;
+}
 
 /**
  * Create new vec3
@@ -157,9 +172,9 @@ export function floor(A, dst = create()) {
  * @returns {Physics.vec3}
  */
 export function min(A, B, dst = create()) {
-	dst[X] = Math.min(A[X], B[X]);
-	dst[Y] = Math.min(A[Y], B[Y]);
-	dst[Z] = Math.min(A[Z], B[Z]);
+	dst[X] = MathEx.min(A[X], B[X]);
+	dst[Y] = MathEx.min(A[Y], B[Y]);
+	dst[Z] = MathEx.min(A[Z], B[Z]);
 	return dst;
 }
 
@@ -171,9 +186,9 @@ export function min(A, B, dst = create()) {
  * @returns {Physics.vec3}
  */
 export function max(A, B, dst = create()) {
-	dst[X] = Math.max(A[X], B[X]);
-	dst[Y] = Math.max(A[Y], B[Y]);
-	dst[Z] = Math.max(A[Z], B[Z]);
+	dst[X] = MathEx.max(A[X], B[X]);
+	dst[Y] = MathEx.max(A[Y], B[Y]);
+	dst[Z] = MathEx.max(A[Z], B[Z]);
 	return dst;
 }
 
@@ -259,6 +274,19 @@ export function length(A) {
 export function squaredLength(A) {
 	let [x, y, z] = A;
 	return x * x + y * y + z * z;
+}
+
+/**
+ * Returns the `trunc` of each component of `A` in `dst`
+ * @param {Physics.constVec3} A
+ * @param {Physics.vec3} dst
+ * @returns {Physics.vec3}
+ */
+export function trunc(A, dst = create()) {
+	dst[X] = Math.trunc(A[X]);
+	dst[Y] = Math.trunc(A[Y]);
+	dst[Z] = Math.trunc(A[Z]);
+	return dst;
 }
 
 /**
@@ -476,7 +504,8 @@ export function equals(A, B, epsilon = 0.0001) {
 }
 
 export default {
-	add
+	abs
+	, add
 	, angle
 	, ceil
 	, clone
@@ -510,5 +539,6 @@ export default {
 	, squaredLength
 	, subtract
 	, toString
+	, trunc
 	, zero: zero
 };
