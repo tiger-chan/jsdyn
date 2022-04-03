@@ -219,6 +219,22 @@ export function scaleAndAdd(A, B, s, dst = create()) {
 }
 
 /**
+ * @param {Physics.constVec2} A
+ * @param {Physics.constVec2} B
+ * @param {Physics.constVec2} C
+ * @param {Physics.vec3} dst
+ * @returns {Physics.vec3}
+ */
+export function tripleProduct(A, B, C, dst = vec3.create()) {
+	let a = vec3.from(A);
+	let b = vec3.from(B);
+	let c = vec3.from(C);
+	let out = vec3.create();
+	let triCross = vec3.cross(a, vec3.cross(b, c, out), out);
+	return triCross;
+}
+
+/**
  * Returns the `trunc` of each component of `A` in `dst`
  * @param {Physics.constVec2} A
  * @param {Physics.vec2} dst
@@ -472,6 +488,7 @@ export default {
 	, squaredDistance
 	, squaredLength
 	, subtract
+	, tripleProduct
 	, trunc
 	, toString
 	, zero: zero

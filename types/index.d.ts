@@ -141,6 +141,16 @@ declare namespace Physics {
 		export function squaredLength(A: constVec2): number;
 
 		/**
+		 * the cross product of one vector with the cross product of the other two
+		 * @param A
+		 * @param B
+		 * @param C
+		 * @param dst
+		 * @returns A x (B x C)
+		 */
+		export function tripleProduct(A: constVec2, B: constVec2, C: constVec2, dst?: vec3): vec3;
+
+		/**
 		 * Returns the `trunc` of each component of `A` in `dst`
 		 * @param A
 		 * @param dst
@@ -314,6 +324,16 @@ declare namespace Physics {
 		 * Returns the square distnace between `A` and `B`
 		 */
 		export function squaredDistance(A: constVec3, B: constVec3): number;
+
+		/**
+		 * the cross product of one vector with the cross product of the other two
+		 * @param A
+		 * @param B
+		 * @param C
+		 * @param dst
+		 * @returns A x (B x C)
+		 */
+		export function tripleProduct(A: constVec3, B: constVec3, C: constVec3, dst?: vec3): vec3;
 
 		/**
 		 * Returns the `trunc` of each component of `A` in `dst`

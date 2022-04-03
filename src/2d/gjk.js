@@ -1,20 +1,11 @@
 import vec2 from "../vec2";
 import vec3 from "../vec3";
 
-function tripleProd(v1, v2, v3) {
-	let A = vec3.from(v1);
-	let B = vec3.from(v2);
-	let C = vec3.from(v3);
-	let out = vec3.create();
-	let triCross = vec3.cross(vec3.cross(A, B, out), C, out);
-	return vec2.from(triCross);
-}
-
 function simplexLine(simplex, dir) {
 	let [B, A] = simplex;
 	let AB = vec2.normalized(vec2.subtract(B, A));
 	let AO = vec2.normalized(vec2.subtract(vec2.zero, A));
-	let APerp = tripleProd(AB, AO, AB);
+	let APerp = vec2.from(vec2.tripleProduct(AB, AO, AB));
 	vec2.update(APerp, dir);
 	return false;
 }
@@ -24,8 +15,8 @@ function simplexTri(/** @type {[number, number][]} */ simplex, dir) {
 	let AO = vec2.normalized(vec2.subtract(vec2.zero, A));
 	let AB = vec2.normalized(vec2.subtract(AO, B));
 	let AC = vec2.normalized(vec2.subtract(C, A));
-	let ABPerp = tripleProd(AC, AB, AB);
-	let ACPerp = tripleProd(AB, AC, AC);
+	let ABPerp = vec2.from(vec2.tripleProduct(AC, AB, AB));
+	let ACPerp = vec2.from(vec2.tripleProduct(AB, AC, AC));
 
 	if (vec2.dot(ABPerp, AO) > 0) {
 		// Region AB

@@ -277,6 +277,19 @@ export function squaredLength(A) {
 }
 
 /**
+ * @param {Physics.constVec3} A
+ * @param {Physics.constVec3} B
+ * @param {Physics.constVec3} C
+ * @param {Physics.vec3} dst
+ * @returns {Physics.vec3}
+ */
+export function tripleProduct(A, B, C, dst = create()) {
+	let out = create();
+	let triCross = cross(A, cross(B, C, out), out);
+	return triCross;
+}
+
+/**
  * Returns the `trunc` of each component of `A` in `dst`
  * @param {Physics.constVec3} A
  * @param {Physics.vec3} dst
