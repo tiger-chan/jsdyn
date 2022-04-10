@@ -633,21 +633,62 @@ declare namespace Physics {
 		export function create(origin: vector, dir: vector, maxDistance?: number): Ray;
 	}
 
-	type Simplex<T extends number> = Tuple<number, T>;
+	export interface Circle<Vector> {
+		center: Vector;
+		radius: number;
+	}
+
+	export interface Polygon<Vector> {
+		verticies: Vector[];
+	}
 
 	export interface ConvexShape<Vector> {
 		center: Vector;
-		verticies(): Vector[];
+		support(dir: readonly Vector, dst?: Vector): Vector;
 	}
 
 	export module gjk2 {
-		type Simplex2 = Tuple<vec2, 3>
+		type Support = (dir: vec2, dst?: vec2) => vec2;
+		type Polygon = Physics.Polygon<vec2>;
+		export function supportCircle(shape: Physics.Circle<vec2>, dir: vec2, dst?: vec2): vec2;
+		export function supportPolygon(shape: Physics.Polygon<vec2>, dir: vec2, dst?: vec2): vec2;
+
+		export function bindSupportCircle(shape: Physics.Circle<vec2>): Support;
+		export function bindSupportPolygon(shape: Physics.Polygon<vec2>): Support;
+
+		export enum Result {
+			working = 0,
+			intersection = 1,
+			noIntersection = 2
+		}
+
+		type Simplex = Tuple<vec2, 0> | Tuple<vec2, 1> | Tuple<vec2, 2> | Tuple<vec2, 3>;
+
+		export interface State {
+			shape1: ConvexShape<vec2>;
+			shape2: ConvexShape<vec2>;
+			simplex: Simplex
+			dir: vec2
+		}
+
+		/**
+		 * Attempts the next step of the GJK request
+		 * @param state
+		 * @returns The result of the step taken; will return `Result.NoInteraction` if it was determined impossible
+		 */
+		export function step(state: State): Result;
+
 		/**
 		 * Returns test if the two shapes are colliding
 		 * @param s1
 		 * @param s2
 		 */
-		export function calculate(s1: ConvexShape<vec2>, s2: ConvexShape<vec2>): boolean;
+		export function test(s1: ConvexShape<vec2>, s2: ConvexShape<vec2>): boolean;
+		/**
+		 * Returns test if the two shapes are colliding
+		 * @param state
+		 */
+		export function test(state: State): boolean;
 	}
 
 	export module gjk3 {

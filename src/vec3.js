@@ -284,9 +284,7 @@ export function squaredLength(A) {
  * @returns {Physics.vec3}
  */
 export function tripleProduct(A, B, C, dst = create()) {
-	let out = create();
-	let triCross = cross(A, cross(B, C, out), out);
-	return triCross;
+	return cross(A, cross(B, C), dst);
 }
 
 /**
@@ -551,6 +549,7 @@ export default {
 	, squaredDistance
 	, squaredLength
 	, subtract
+	, tripleProduct
 	, toString
 	, trunc
 	, zero: zero

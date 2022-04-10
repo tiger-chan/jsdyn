@@ -229,9 +229,7 @@ export function tripleProduct(A, B, C, dst = vec3.create()) {
 	let a = vec3.from(A);
 	let b = vec3.from(B);
 	let c = vec3.from(C);
-	let out = vec3.create();
-	let triCross = vec3.cross(a, vec3.cross(b, c, out), out);
-	return triCross;
+	return vec3.tripleProduct(a, b, c, dst);
 }
 
 /**
