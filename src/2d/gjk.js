@@ -40,7 +40,7 @@ export function supportPolygon(shape, dir, dst = vec2.create()) {
 			cur = i;
 		}
 	}
-	vec2.copy(shape.verticies[cur], dst)
+	vec2.copy(shape.verticies[cur], dst);
 	return dst;
 }
 
@@ -64,7 +64,7 @@ export const Result = {
 	working: /** @type {Physics.gjk2.Result.working} */ (0),
 	intersection: /** @type {Physics.gjk2.Result.intersection} */(1),
 	noIntersection:  /** @type {Physics.gjk2.Result.noIntersection} */(2)
-}
+};
 
 /**
  * 
@@ -95,7 +95,7 @@ function addSupport(state) {
 export function step(state) {
 	switch (state.simplex.length) {
 		case 0: {
-			vec2.subtract(state.shape2.center, state.shape1.center, state.dir)
+			vec2.subtract(state.shape2.center, state.shape1.center, state.dir);
 			break;
 		}
 		case 1: {
@@ -186,4 +186,4 @@ export default {
 	supportPolygon,
 	step,
 	test,
-}
+};
