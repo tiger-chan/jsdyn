@@ -1,4 +1,5 @@
 import vec2 from "../vec2.js";
+import vec3 from "../vec3.js";
 
 /**
  * Find the support of a circle
@@ -72,9 +73,7 @@ export const Result = {
  * @returns {boolean}
  */
 function addSupport(state) {
-	const s1 = state.shape1.support(state.dir);
-	const s2 = state.shape2.support(vec2.negate(state.dir));
-	const vert = vec2.subtract(s1, s2);
+	const vert = support(state.shape1, state.shape2, state.dir);
 	switch (state.simplex.length) {
 		case 3:
 			return false;
@@ -85,6 +84,19 @@ function addSupport(state) {
 	}
 
 	return vec2.dot(state.dir, vert) >= 0;
+}
+
+/**
+ *
+ * @param {Physics.ConvexShape<Physics.vec2>} s1
+ * @param {Physics.ConvexShape<Physics.vec2>} s2
+ * @param {Physics.vec2} dir
+ * @param {Physics.vec2} dst
+ */
+export function support(s1, s2, dir, dst = vec2.create()) {
+	const sup1 = s1.support(dir);
+	const sup2 = s2.support(vec2.negate(dir));
+	return vec2.subtract(sup1, sup2, dst);
 }
 
 /**
@@ -110,6 +122,12 @@ export function step(state) {
 			const bo = vec2.negate(state.simplex[0]);
 
 			const dir = vec2.tripleProduct(ba, bo, ba);
+
+			if (vec3.squaredLength(dir) <= Number.EPSILON) {
+				// Degenerate case where line is on the origin
+				vec3.copy(vec2.rotate(ba, vec2.zero, Math.PI / 2), dir);
+			}
+
 			vec2.copy(dir, state.dir);
 			break;
 		}
@@ -182,8 +200,9 @@ export default {
 	bindSupportPolygon,
 	create,
 	Result,
+	step,
+	support,
 	supportCircle,
 	supportPolygon,
-	step,
 	test,
 };

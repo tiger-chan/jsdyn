@@ -5,6 +5,16 @@ export default Physics;
 type Tuple<T, N extends number> = N extends N ? number extends N ? T[] : _TupleOf<T, N, []> : never;
 type _TupleOf<T, N extends number, R extends unknown[]> = R['length'] extends N ? R : _TupleOf<T, N, [T, ...R]>;
 
+class PriorityQueue<T> {
+	constructor(comparitor?: (a: T, b: T) => boolean);
+	size(): number;
+	isEmpty(): boolean;
+	peek(): T;
+	push(...values: T[]): void;
+	pop(): T;
+	replace(value: T): T;
+}
+
 declare namespace Physics {
 	export type vec2 = [number, number];
 	export type constVec2 = readonly [number, number];
@@ -178,9 +188,12 @@ declare namespace Physics {
 		export function dot(A: constVec2, B: constVec2): number;
 
 		/**
-		 * Returns `A` x `B` in `dst`
+		 * Returns `A` x `B`
+		 * 
+		 * Note: because the 2d cross product doesn't strictly
+		 * exist and will always return 0 for x and y, we are only returning the z value
 		 */
-		export function cross(A: constVec2, B: constVec2, dst?: vec3): vec3;
+		export function cross(A: constVec2, B: constVec2): number;
 
 		/**
 		 * Lerp between `A` to `B` where `t` is between [0, 1] returns result in `dst`
@@ -664,12 +677,15 @@ declare namespace Physics {
 
 		type Simplex = Tuple<vec2, 0> | Tuple<vec2, 1> | Tuple<vec2, 2> | Tuple<vec2, 3>;
 
+
 		export interface State {
 			shape1: ConvexShape<vec2>;
 			shape2: ConvexShape<vec2>;
-			simplex: Simplex
-			dir: vec2
+			simplex: Simplex;
+			dir: vec2;
 		}
+
+		export function support(s1: ConvexShape<vec2>, s2: ConvexShape<vec2>, dir: vec2, dst?: vec2): vec2;
 
 		/**
 		 * Attempts the next step of the GJK request
@@ -689,6 +705,54 @@ declare namespace Physics {
 		 * @param state
 		 */
 		export function test(state: State): boolean;
+	}
+
+	export module epa {
+		export enum Winding {
+			cw = 0,
+			ccw = 1,
+		}
+
+		type Polytope = PriorityQueue<Edge>;
+
+		export interface State {
+			dir: vec2;
+			polytope: Polytope;
+			shape1: ConvexShape<vec2>;
+			shape2: ConvexShape<vec2>;
+			winding: Winding;
+		}
+
+		export interface Edge {
+			/**
+			 * distance calculated from the perpendicular edge to the origin
+			 */
+			distance: number;
+			/**
+			 * The edge's normal
+			 */
+			normal: vec2;
+			/**
+			 * The start point of the edge
+			 */
+			p1: vec2;
+			/**
+			 * The end point of the edge
+			 */
+			p2: vec2;
+		}
+
+		/**
+		 * Penetration result
+		 */
+		export interface Result {
+			normal: vec2;
+			depth: number;
+		}
+
+		export function createState(state: gjk2.State): State;
+
+		export function solve(state: State, dst?: Result, maxiterations?: number, epsilon?: number): Result;
 	}
 
 	export module gjk3 {

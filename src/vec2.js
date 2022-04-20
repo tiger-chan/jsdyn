@@ -343,13 +343,10 @@ export function dot(A, B) {
  * Returns `A` x `B` in `dst`
  * @param {Physics.constVec2} A
  * @param {Physics.constVec2} B
- * @param {Physics.vec3} dst
- * @returns {Physics.vec3}
+ * @returns {number}
  */
-export function cross(A, B, dst = vec3.create()) {
-	dst[X] = dst[Y] = 0;
-	dst[Z] = A[X] * B[Y] - A[Y] * B[X];
-	return dst;
+export function cross(A, B) {
+	return A[X] * B[Y] - A[Y] * B[X];
 }
 
 /**
