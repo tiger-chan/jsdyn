@@ -143,12 +143,22 @@ declare namespace Physics {
 		/**
 		 * Returns the magnitude of `A`
 		 */
+		export function magnitude(A: constVec2): number;
+
+		/**
+		 * Returns the square magnitude of `A`
+		 */
+		export function magnitudeSquared(A: constVec2): number;
+
+		/**
+		 * Returns the magnitude of `A`
+		 */
 		export function length(A: constVec2): number;
 
 		/**
 		 * Returns the square magnitude of `A`
 		 */
-		export function squaredLength(A: constVec2): number;
+		export function lengthSquared(A: constVec2): number;
 
 		/**
 		 * the cross product of one vector with the cross product of the other two
@@ -238,6 +248,11 @@ declare namespace Physics {
 		 * Compare approximate equality of `A` and `B` given margin of error `epsilon`
 		 */
 		export function equals(A: constVec2, B: constVec2, epsilon?: number): boolean;
+
+		/**
+		 * Check if this vector is a zero vector (approximately)
+		 */
+		export function isZero(A: constVec2, epsilon?: number): boolean;
 	}
 
 	export module vec3 {
@@ -363,7 +378,17 @@ declare namespace Physics {
 		/**
 		 * Returns the square magnitude of `A`
 		 */
-		export function squaredLength(A: constVec3): number;
+		export function lengthSquared(A: constVec3): number;
+
+		/**
+		 * Returns the magnitude of `A`
+		 */
+		export function magnitude(A: constVec3): number;
+
+		/**
+		 * Returns the square magnitude of `A`
+		 */
+		export function magnitudeSquared(A: constVec3): number;
 
 		/**
 		 * Returns the negative of `A` in `dst`
@@ -668,6 +693,32 @@ declare namespace Physics {
 
 		export function bindSupportCircle(shape: Physics.Circle<vec2>): Support;
 		export function bindSupportPolygon(shape: Physics.Polygon<vec2>): Support;
+
+		export interface DistanceState {
+			shapeA: ConvexShape<vec2>;
+			shapeB: ConvexShape<vec2>;
+			dir: vec2;
+			tolerance: number;
+		}
+
+		export interface DistanceResult {
+			distance: number;
+			normal: vec2;
+			pointA: vec2;
+			pointB: vec2;
+		}
+
+		export interface SupportPoint {
+			p: vec2;
+			spA: vec2;
+			spB: vec2;
+		}
+
+		export function createDistanceResult(): DistanceResult;
+
+		export function createDistnaceState(s1: ConvexShape<vec2>, s2: ConvexShape<vec2>): DistanceState;
+
+		export function distance(state: DistanceState, dst: DistanceResult, maxIterations?: number): boolean;
 
 		export enum Result {
 			working = 0,

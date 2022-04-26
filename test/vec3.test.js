@@ -213,14 +213,14 @@ test("round(A)", (t) => {
 	t.deepEqual(out, [1, 2, 3]);
 });
 
-test("squaredLength([1, 1])", (t) => {
-	let len = vec3.squaredLength([0, 0, 1]);
+test("magnitudeSquared([1, 1])", (t) => {
+	let len = vec3.magnitudeSquared([0, 0, 1]);
 	t.deepEqual(1, len);
 
-	len = vec3.squaredLength([0, 0, 1]);
+	len = vec3.magnitudeSquared([0, 0, 1]);
 	t.deepEqual(1, len);
 
-	len = vec3.squaredLength([1, 1, 1]);
+	len = vec3.magnitudeSquared([1, 1, 1]);
 	t.deepEqual(3, len);
 });
 

@@ -46,8 +46,7 @@ test("create(1,2)", (t) => {
 
 test("cross([1,0], [0,1])", (t) => {
 	let vec = vec2.cross([1, 0], [0, 1]);
-	t.is(3, vec.length, "Vec2 should be a length of 3");
-	t.deepEqual([0, 0, 1], vec, "Should be equal");
+	t.deepEqual(1, vec, "Should be equal");
 });
 
 test("distance([1,1], [0,1])", (t) => {
@@ -198,14 +197,14 @@ test("round(A)", (t) => {
 	t.deepEqual(out, [1, 2]);
 });
 
-test("squaredLength([1, 1])", (t) => {
-	let len = vec2.squaredLength([1, 0]);
+test("magnitudeSquared([1, 1])", (t) => {
+	let len = vec2.magnitudeSquared([1, 0]);
 	t.deepEqual(1, len);
 
-	len = vec2.squaredLength([0, 1]);
+	len = vec2.magnitudeSquared([0, 1]);
 	t.deepEqual(1, len);
 
-	len = vec2.squaredLength([1, 1]);
+	len = vec2.magnitudeSquared([1, 1]);
 	t.deepEqual(2, len);
 });
 

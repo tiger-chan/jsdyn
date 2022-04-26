@@ -262,6 +262,25 @@ export function squaredDistance(A, B) {
  * @param {Physics.constVec3} A
  * @returns {number}
  */
+export function magnitude(A) {
+	return Math.hypot(...A);
+}
+
+/**
+ * Returns the square magnitude of `A`
+ * @param {Physics.constVec3} A
+ * @returns {number}
+ */
+export function magnitudeSquared(A) {
+	let [x, y, z] = A;
+	return x * x + y * y + z * z;
+}
+
+/**
+ * Returns the magnitude of `A`
+ * @param {Physics.constVec3} A
+ * @returns {number}
+ */
 export function length(A) {
 	return Math.hypot(...A);
 }
@@ -271,7 +290,7 @@ export function length(A) {
  * @param {Physics.constVec3} A
  * @returns {number}
  */
-export function squaredLength(A) {
+export function lengthSquared(A) {
 	let [x, y, z] = A;
 	return x * x + y * y + z * z;
 }
@@ -333,7 +352,7 @@ export function inverse(A, dst = create()) {
  * @returns {Physics.vec3}
  */
 export function normalize(A, dst = create()) {
-	let len = squaredLength(A);
+	let len = lengthSquared(A);
 	if (len !== 0) {
 		len = 1.0 / Math.sqrt(len);
 	}
@@ -532,10 +551,13 @@ export default {
 	, from
 	, inverse
 	, length
+	, lengthSquared
 	, lerp
 	, max
 	, min
 	, multiply
+	, magnitude
+	, magnitudeSquared
 	, negate
 	, normalize
 	, random
@@ -547,7 +569,6 @@ export default {
 	, scaleAndAdd
 	, set
 	, squaredDistance
-	, squaredLength
 	, subtract
 	, tripleProduct
 	, toString

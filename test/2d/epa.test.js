@@ -1,5 +1,6 @@
 import test from "ava";
 
+import vec2 from "../../src/vec2.js";
 import aabb from "../../src/2d/aabb.js";
 import epa from "../../src/2d/epa.js";
 import gjk from "../../src/2d/gjk.js";
@@ -16,7 +17,7 @@ test("epa.solve", (t) => {
 		const state = epa.createState(gjkState);
 
 		const result = epa.solve(state);
-		t.log(result);
-		t.fail();
+		t.true(vec2.equals([0, 1], result.normal));
+		t.true(Math.abs(1.5 - result.depth) < 0.000001);
 	}
 });

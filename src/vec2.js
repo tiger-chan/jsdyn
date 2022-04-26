@@ -7,6 +7,8 @@ const Z = 2;
 // Vector Size
 const W = 2;
 
+const EPSILON = 0.0001;
+
 /**
  * Return the absolute value of the vector in dst
  * @param {Physics.constVec2} A
@@ -266,6 +268,26 @@ export function squaredDistance(A, B) {
 	return dx * dx + dy * dy;
 }
 
+
+/**
+ * Returns the magnitude of `A`
+ * @param {Physics.constVec2} A
+ * @returns {number}
+ */
+export function magnitude(A) {
+	return Math.hypot(...A);
+}
+
+/**
+ * Returns the square magnitude of `A`
+ * @param {Physics.constVec2} A
+ * @returns {number}
+ */
+export function magnitudeSquared(A) {
+	let [x, y] = A;
+	return x * x + y * y;
+}
+
 /**
  * Returns the magnitude of `A`
  * @param {Physics.constVec2} A
@@ -280,7 +302,7 @@ export function length(A) {
  * @param {Physics.constVec2} A
  * @returns {number}
  */
-export function squaredLength(A) {
+export function lengthSquared(A) {
 	let [x, y] = A;
 	return x * x + y * y;
 }
@@ -316,7 +338,7 @@ export function inverse(A, dst = create()) {
  * @returns {Physics.vec2}
  */
 export function normalize(A, dst = create()) {
-	let len = squaredLength(A);
+	let len = magnitudeSquared(A);
 	if (len !== 0) {
 		len = 1.0 / Math.sqrt(len);
 	}
@@ -444,10 +466,20 @@ export function exactEquals(A, B) {
  * @param {number} epsilon
  * @returns {boolean}
  */
-export function equals(A, B, epsilon = 0.0001) {
+export function equals(A, B, epsilon = EPSILON) {
 	let dx = Math.abs(B[X] - A[X]);
 	let dy = Math.abs(B[Y] - A[Y]);
 	return dx < epsilon && dy < epsilon;
+}
+
+/**
+ * Check if this vector is a zero vector (approximately)
+ * @param {Physics.constVec2} A
+ * @param {number} epsilon
+ * @returns {boolean}
+ */
+export function isZero(A, epsilon = EPSILON) {
+	return Math.abs(A[X]) < epsilon && Math.abs(A[Y]) < epsilon;
 }
 
 export default {
@@ -467,11 +499,15 @@ export default {
 	, floor
 	, from
 	, inverse
+	, isZero
 	, length
+	, lengthSquared
 	, lerp
 	, max
 	, min
 	, multiply
+	, magnitude
+	, magnitudeSquared
 	, negate
 	, normalize
 	, random
@@ -481,7 +517,6 @@ export default {
 	, scaleAndAdd
 	, set
 	, squaredDistance
-	, squaredLength
 	, subtract
 	, tripleProduct
 	, trunc
