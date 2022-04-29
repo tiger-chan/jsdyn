@@ -172,12 +172,12 @@ test("negate(A)", (t) => {
 	t.deepEqual(out, [-1, -1, -1]);
 });
 
-test("normalize(A)", (t) => {
+test("normalized(A)", (t) => {
 	const A = vec3.create(1, 1, 1);
 	let normalized = 1 / Math.sqrt(3);
 	const B = vec3.create(roundFixed(normalized, 5), roundFixed(normalized, 5), roundFixed(normalized, 5));
 
-	let out = vec3.normalize(A);
+	let out = vec3.normalized(A);
 	vec3.set(out, roundFixed(out[0], 5), roundFixed(out[1], 5), roundFixed(out[2], 5));
 	t.deepEqual(out, B);
 });

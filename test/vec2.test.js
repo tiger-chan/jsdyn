@@ -171,13 +171,13 @@ test("negate(A)", (t) => {
 	t.deepEqual(out, [-1, -1]);
 });
 
-test("normalize(A)", (t) => {
+test("normalized(A)", (t) => {
 	const A = vec2.create(1, 1);
 
 	let rad = Math.PI * 45 / 180;
 	const B = vec2.create(roundFixed(Math.cos(rad), 5), roundFixed(Math.sin(rad), 5));
 
-	let out = vec2.normalize(A);
+	let out = vec2.normalized(A);
 	vec2.set(out, roundFixed(out[0], 5), roundFixed(out[1], 5));
 	t.deepEqual(out, B);
 });

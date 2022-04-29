@@ -40,7 +40,7 @@ function buildEdge(p1 = vec2.create(), p2 = vec2.create(), winding = 0) {
 			break;
 		}
 	}
-	norm = vec2.normalize(norm)
+	norm = vec2.normalized(norm)
 
 	return createEdge(p1, p2, norm, Math.abs(vec2.dot(p1, norm)));
 }
@@ -127,10 +127,35 @@ export function createState(state) {
 	return {
 		dir: vec2.create(),
 		polytope: queue,
-		shape1: state.shape1,
-		shape2: state.shape2,
+		shapeA: state.shapeA,
+		shapeB: state.shapeB,
 		winding: winding
 	};
+}
+
+/**
+ * @param {Physics.Circle<Physics.vec2> | Physics.Polygon<Physics.vec2>} shape
+ * @returns {boolean}
+ */
+function isCircle(shape) {
+	return shape.hasOwnProperty("radius");
+}
+
+/**
+ * @param {Physics.Circle<Physics.vec2>} c1
+ * @param {Physics.Circle<Physics.vec2>} c2
+ * @param {Physics.epa.Result} dst
+ * @returns {Physics.epa.Result}
+ */
+function circleSolve(c1, c2, dst) {
+	const dir = vec2.subtract(c2.center, c1.center);
+	const radii = c1.radius + c2.radius;
+	const sqrDist = vec2.magnitudeSquared(dir);
+
+	if (sqrDist <= radii * radii) {
+		dst.depth = radii - vec2.normalize(dir, dst.normal);
+	}
+	return dst;
 }
 
 /**
@@ -142,11 +167,17 @@ export function createState(state) {
  * @returns {Physics.epa.Result}
  */
 export function solve(state, dst = create(), maxiterations = MAX_ITERATION, epsilon = EPSILON) {
+	if (isCircle(state.shapeA.shape) && isCircle(state.shapeB.shape)) {
+		const c1 = /** @type {Physics.Circle<Physics.vec2>} */(state.shapeA.shape);
+		const c2 = /** @type {Physics.Circle<Physics.vec2>} */(state.shapeB.shape);
+		return circleSolve(c1, c2, dst);
+	}
+
 	let point = vec2.create();
 	let edge = createEdge();
 	for (let i = 0; i < maxiterations; ++i) {
 		let edge = findNearestEdge(state);
-		gjk2.support(state.shape1, state.shape2, edge.normal, point);
+		gjk2.support(state.shapeA, state.shapeB, edge.normal, point);
 		const projection = vec2.dot(point, edge.normal);
 		const dist = projection - edge.distance;
 		if (dist < epsilon) {

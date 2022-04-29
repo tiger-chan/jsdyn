@@ -349,17 +349,27 @@ export function inverse(A, dst = create()) {
  * Returns `A` normalized in `dst`
  * @param {Physics.constVec3} A
  * @param {Physics.vec3} dst
- * @returns {Physics.vec3}
+ * @returns {number}
  */
 export function normalize(A, dst = create()) {
-	let len = lengthSquared(A);
-	if (len !== 0) {
+	let len = magnitudeSquared(A);
+	if (len > Number.EPSILON) {
 		len = 1.0 / Math.sqrt(len);
 	}
 	dst[X] = A[X] * len;
 	dst[Y] = A[Y] * len;
 	dst[Z] = A[Z] * len;
-	return dst;
+	return len;
+}
+
+/**
+ * Returns `A` normalized in stored in `dst`
+ * @param {Physics.constVec3} A
+ * @param {Physics.vec3} dst
+ * @returns {Physics.vec3}
+ */
+export function normalized(A, dst = create()) {
+	return normalize(A, dst), dst;
 }
 
 /**
@@ -560,6 +570,7 @@ export default {
 	, magnitudeSquared
 	, negate
 	, normalize
+	, normalized
 	, random
 	, rotateX
 	, rotateY

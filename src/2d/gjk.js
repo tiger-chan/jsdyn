@@ -13,7 +13,7 @@ const MAX_ITERATIONS = 100;
  * @returns {Physics.vec2}
  */
 export function supportCircle(shape, dir, dst = vec2.create()) {
-	return vec2.add(shape.center, vec2.scale(vec2.normalize(dir, dst), shape.radius, dst), dst);
+	return vec2.add(shape.center, vec2.scale(vec2.normalized(dir, dst), shape.radius, dst), dst);
 }
 
 /**
@@ -199,6 +199,52 @@ function copySupportPoint(a, dst) {
 }
 
 /**
+ * @param {Physics.Circle<Physics.vec2> | Physics.Polygon<Physics.vec2>} shape
+ * @returns {boolean}
+ */
+function isCircle(shape) {
+	return shape.hasOwnProperty("radius");
+}
+
+/**
+ * @param {Physics.Circle<Physics.vec2>} c1
+ * @param {Physics.Circle<Physics.vec2>} c2
+ * @returns {boolean}
+ */
+function circleTest(c1, c2) {
+	const dir = vec2.subtract(c2.center, c1.center);
+	const radii = c1.radius + c2.radius;
+	const sqrDist = vec2.magnitudeSquared(dir);
+
+	return (sqrDist < radii * radii);
+}
+
+/**
+ * @param {Physics.Circle<Physics.vec2>} c1
+ * @param {Physics.Circle<Physics.vec2>} c2
+ * @param {Physics.gjk2.DistanceResult} dst
+ * @returns {boolean}
+ */
+function circleDistance(c1, c2, dst) {
+	const dir = vec2.subtract(c2.center, c1.center);
+	const radii = c1.radius + c2.radius;
+	const sqrDist = vec2.magnitudeSquared(dir);
+
+	if (sqrDist >= radii * radii) {
+		// there is a gap between the circles
+		dst.distance = vec2.magnitude(dir);
+		const scale = dst.distance == 0 ? 0 : 1 / dst.distance;
+		dst.distance -= radii;
+		vec2.scale(dir, scale, dst.normal);
+
+		vec2.scaleAndAdd(c1.center, dst.normal, c1.radius, dst.pointA);
+		vec2.scaleAndAdd(c2.center, vec2.negate(dst.normal), c2.radius, dst.pointB);
+		return true;
+	}
+	return false;
+}
+
+/**
  * @param {Physics.gjk2.DistanceState} state
  * @param {Physics.gjk2.DistanceResult} dst
  * @param {number} maxIterations
@@ -206,6 +252,13 @@ function copySupportPoint(a, dst) {
  */
 export function distance(state, dst, maxIterations = MAX_ITERATIONS) {
 	// based on description given in https://dyn4j.org/2010/04/gjk-distance-closest-points/
+
+	if (isCircle(state.shapeA.shape) && isCircle(state.shapeB.shape)) {
+		const c1 = /** @type {Physics.Circle<Physics.vec2>} */(state.shapeA.shape);
+		const c2 = /** @type {Physics.Circle<Physics.vec2>} */(state.shapeB.shape);
+		return circleDistance(c1, c2, dst);
+	}
+
 	function createSupport() {
 		/** @type {Physics.gjk2.SupportPoint} */
 		const a = {
@@ -215,6 +268,7 @@ export function distance(state, dst, maxIterations = MAX_ITERATIONS) {
 		};
 		return a;
 	}
+
 	// Pre allocate all of the values we are going to be using
 	/** @type {Physics.gjk2.SupportPoint} */
 	let a = createSupport();
@@ -311,7 +365,7 @@ export const Result = {
  * @returns {boolean}
  */
 function addSupport(state) {
-	const vert = support(state.shape1, state.shape2, state.dir);
+	const vert = support(state.shapeA, state.shapeB, state.dir);
 	switch (state.simplex.length) {
 		case 3:
 			return false;
@@ -345,7 +399,13 @@ export function support(s1, s2, dir, dst = vec2.create()) {
 export function step(state) {
 	switch (state.simplex.length) {
 		case 0: {
-			vec2.subtract(state.shape2.center, state.shape1.center, state.dir);
+			if (isCircle(state.shapeA.shape) && isCircle(state.shapeB.shape)) {
+				const c1 = /** @type {Physics.Circle<Physics.vec2>} */(state.shapeA.shape);
+				const c2 = /** @type {Physics.Circle<Physics.vec2>} */(state.shapeB.shape);
+				return circleTest(c1, c2) ? Result.intersection : Result.noIntersection;
+			}
+
+			vec2.subtract(state.shapeB.center, state.shapeA.center, state.dir);
 			break;
 		}
 		case 1: {
@@ -403,8 +463,8 @@ export function step(state) {
  */
 export function create(s1, s2) {
 	return {
-		shape1: s1,
-		shape2: s2,
+		shapeA: s1,
+		shapeB: s2,
 		simplex: [],
 		dir: vec2.create()
 	};

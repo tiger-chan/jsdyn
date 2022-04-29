@@ -188,9 +188,14 @@ declare namespace Physics {
 		export function inverse(A: constVec2, dst?: vec2): vec2;
 
 		/**
-		 * Returns `A` normalized in `dst`
+		 * Returns the normalization factor used, and `A` normalized in stored in `dst`
 		 */
-		export function normalize(A: constVec2, dst?: vec2): vec2;
+		export function normalize(A: constVec2, dst?: vec2): number;
+
+		/**
+		 * Returns `A` normalized in stored in `dst`
+		 */
+		export function normalized(A: constVec2, dst?: vec2): vec2;
 
 		/**
 		 * Returns `A` dot `B`
@@ -401,9 +406,9 @@ declare namespace Physics {
 		export function inverse(A: constVec3, dst?: vec3): vec3;
 
 		/**
-		 * Returns `A` normalized in `dst`
+		 * Returns the normalization factor used, and `A` normalized in stored in `dst`
 		 */
-		export function normalize(A: constVec3, dst?: vec3): vec3;
+		export function normalize(A: constVec3, dst?: vec3): number;
 
 		/**
 		 * Returns `A` dot `B`
@@ -683,6 +688,7 @@ declare namespace Physics {
 	export interface ConvexShape<Vector> {
 		center: Vector;
 		support(dir: readonly Vector, dst?: Vector): Vector;
+		shape: Circle<Vector> | Polygon<Vector>;
 	}
 
 	export module gjk2 {
@@ -730,8 +736,8 @@ declare namespace Physics {
 
 
 		export interface State {
-			shape1: ConvexShape<vec2>;
-			shape2: ConvexShape<vec2>;
+			shapeA: ConvexShape<vec2>;
+			shapeB: ConvexShape<vec2>;
 			simplex: Simplex;
 			dir: vec2;
 		}
@@ -769,8 +775,8 @@ declare namespace Physics {
 		export interface State {
 			dir: vec2;
 			polytope: Polytope;
-			shape1: ConvexShape<vec2>;
-			shape2: ConvexShape<vec2>;
+			shapeA: ConvexShape<vec2>;
+			shapeB: ConvexShape<vec2>;
 			winding: Winding;
 		}
 

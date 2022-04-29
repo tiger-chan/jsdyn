@@ -121,8 +121,7 @@ function intersectionNormal(aabb, point, dst = vec3.create()) {
 
 	let scaled = vec3.scale(vec3.divide(p, vec3.abs(d, d), dst), 1.000001, dst);
 	scaled = vec3.trunc(scaled, dst);
-	vec3.normalize(scaled, dst);
-	return dst;
+	return vec3.normalized(scaled, dst);
 }
 
 /**
@@ -160,7 +159,7 @@ function getIntersectionRay(aabb, r) {
  */
 export function intersectPoint(aabb, p) {
 	if (overlapsPoint(aabb, p)) {
-		let dir = vec3.normalize(vec3.subtract(p, aabb.center));
+		let dir = vec3.normalized(vec3.subtract(p, aabb.center));
 
 		let iP = vec3.add(aabb.center, vec3.multiply(aabb.extents, dir));
 
