@@ -1,6 +1,6 @@
-export = Physics;
-export as namespace Physics;
-export default Physics;
+export = JsDyn;
+export as namespace JsDyn;
+export default JsDyn;
 
 type Tuple<T, N extends number> = N extends N ? number extends N ? T[] : _TupleOf<T, N, []> : never;
 type _TupleOf<T, N extends number, R extends unknown[]> = R['length'] extends N ? R : _TupleOf<T, N, [T, ...R]>;
@@ -15,7 +15,7 @@ class PriorityQueue<T> {
 	replace(value: T): T;
 }
 
-declare namespace Physics {
+declare namespace JsDyn {
 	export type vec2 = [number, number];
 	export type constVec2 = readonly [number, number];
 	export type vec3 = [number, number, number];

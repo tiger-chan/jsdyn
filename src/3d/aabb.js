@@ -2,21 +2,21 @@ import vec3 from "../vec3.js";
 import math from "../math.js";
 
 /**
- * @implements {Physics.AABB<Physics.vec3>}
+ * @implements {JsDyn.AABB<JsDyn.vec3>}
  */
 export class AxisAlignedBoundingBox {
-	/** @type {Physics.vec3} */
+	/** @type {JsDyn.vec3} */
 	center;
-	/** @type {Physics.vec3} */
+	/** @type {JsDyn.vec3} */
 	extents;
 }
 
 export const AABB = AxisAlignedBoundingBox;
 
 /**
- * @param {Physics.vec3} center 
- * @param {Physics.vec3} extents 
- * @returns {Physics.AABB<Physics.vec3>}
+ * @param {JsDyn.vec3} center 
+ * @param {JsDyn.vec3} extents 
+ * @returns {JsDyn.AABB<JsDyn.vec3>}
  */
 export function create(center, extents) {
 	let aabb = new AABB();
@@ -26,7 +26,7 @@ export function create(center, extents) {
 }
 
 /**
- * @param {Physics.AABB<Physics.vec3>} aabb
+ * @param {JsDyn.AABB<JsDyn.vec3>} aabb
  * @returns {number}
  */
 export function depth(aabb) {
@@ -34,25 +34,25 @@ export function depth(aabb) {
 }
 
 /**
- * @param {Physics.AABB<Physics.vec3>} aabb
- * @param {Physics.vec3} dst
- * @returns {Physics.vec3}
+ * @param {JsDyn.AABB<JsDyn.vec3>} aabb
+ * @param {JsDyn.vec3} dst
+ * @returns {JsDyn.vec3}
  */
 export function min(aabb, dst = vec3.create()) {
 	return vec3.subtract(aabb.center, aabb.extents, dst);
 }
 
 /**
- * @param {Physics.AABB<Physics.vec3>} aabb
- * @param {Physics.vec3} dst
- * @returns {Physics.vec3}
+ * @param {JsDyn.AABB<JsDyn.vec3>} aabb
+ * @param {JsDyn.vec3} dst
+ * @returns {JsDyn.vec3}
  */
 export function max(aabb, dst = vec3.create()) {
 	return vec3.add(aabb.center, aabb.extents, dst);
 }
 
 /**
- * @param {Physics.AABB<Physics.vec3>} aabb
+ * @param {JsDyn.AABB<JsDyn.vec3>} aabb
  * @returns {number}
  */
 export function width(aabb) {
@@ -60,7 +60,7 @@ export function width(aabb) {
 }
 
 /**
- * @param {Physics.AABB<Physics.vec3>} aabb
+ * @param {JsDyn.AABB<JsDyn.vec3>} aabb
  * @returns {number}
  */
 export function height(aabb) {
@@ -68,9 +68,9 @@ export function height(aabb) {
 }
 
 /**
- * @param {Physics.AABB<Physics.vec3>} aabb
- * @param {Physics.vec3} dst
- * @returns {Physics.vec3}
+ * @param {JsDyn.AABB<JsDyn.vec3>} aabb
+ * @param {JsDyn.vec3} dst
+ * @returns {JsDyn.vec3}
  */
 export function size(aabb, dst = vec3.create()) {
 	vec3.set(dst, width(aabb), height(aabb), depth(aabb));
@@ -78,9 +78,9 @@ export function size(aabb, dst = vec3.create()) {
 }
 
 /**
- * @param {Physics.AABB<Physics.vec3>} aabb
- * @param {Physics.vec3[]} dst
- * @returns {Physics.vec3[]}
+ * @param {JsDyn.AABB<JsDyn.vec3>} aabb
+ * @param {JsDyn.vec3[]} dst
+ * @returns {JsDyn.vec3[]}
  */
 export function vertices(aabb, dst = []) {
 	dst.length = 8;
@@ -109,10 +109,10 @@ export function vertices(aabb, dst = []) {
 
 /**
  * 
- * @param {Physics.AABB<Physics.vec3>} aabb
- * @param {Physics.vec3} point
- * @param {Physics.vec3} dst
- * @returns {Physics.vec3}
+ * @param {JsDyn.AABB<JsDyn.vec3>} aabb
+ * @param {JsDyn.vec3} point
+ * @param {JsDyn.vec3} dst
+ * @returns {JsDyn.vec3}
  */
 function intersectionNormal(aabb, point, dst = vec3.create()) {
 	// https://blog.johnnovak.net/2016/10/22/the-nim-ray-tracer-project-part-4-calculating-box-normals/
@@ -125,8 +125,8 @@ function intersectionNormal(aabb, point, dst = vec3.create()) {
 }
 
 /**
- * @param {Physics.AABB<Physics.vec3>} aabb
- * @param {Physics.Ray<Physics.vec3>} r
+ * @param {JsDyn.AABB<JsDyn.vec3>} aabb
+ * @param {JsDyn.Ray<JsDyn.vec3>} r
  * @returns  {[number, number]} [tmin, tmax]
  */
 function getIntersectionRay(aabb, r) {
@@ -153,9 +153,9 @@ function getIntersectionRay(aabb, r) {
 }
 
 /**
- * @param {Physics.AABB<Physics.vec3>} aabb
- * @param {Physics.vec3} p
- * @returns  {Physics.HitResult<Physics.vec3> | null}
+ * @param {JsDyn.AABB<JsDyn.vec3>} aabb
+ * @param {JsDyn.vec3} p
+ * @returns  {JsDyn.HitResult<JsDyn.vec3> | null}
  */
 export function intersectPoint(aabb, p) {
 	if (overlapsPoint(aabb, p)) {
@@ -163,7 +163,7 @@ export function intersectPoint(aabb, p) {
 
 		let iP = vec3.add(aabb.center, vec3.multiply(aabb.extents, dir));
 
-		/** @type {Physics.HitResult<Physics.vec3>} */
+		/** @type {JsDyn.HitResult<JsDyn.vec3>} */
 		return {
 			pos: iP,
 			delta: vec3.subtract(iP, p),
@@ -175,9 +175,9 @@ export function intersectPoint(aabb, p) {
 }
 
 /**
- * @param {Physics.AABB<Physics.vec3>} aabb
- * @param {Physics.Ray<Physics.vec3>} r
- * @returns  {Physics.HitResult<Physics.vec3> | null}
+ * @param {JsDyn.AABB<JsDyn.vec3>} aabb
+ * @param {JsDyn.Ray<JsDyn.vec3>} r
+ * @returns  {JsDyn.HitResult<JsDyn.vec3> | null}
  */
 export function intersectRay(aabb, r) {
 	let [tmin, tmax] = getIntersectionRay(aabb, r);
@@ -188,7 +188,7 @@ export function intersectRay(aabb, r) {
 		// Intersection point
 		let iP = vec3.add(r.origin, delta);
 
-		/** @type {Physics.HitResult<Physics.vec3>} */
+		/** @type {JsDyn.HitResult<JsDyn.vec3>} */
 		return {
 			pos: iP,
 			delta: delta,
@@ -200,8 +200,8 @@ export function intersectRay(aabb, r) {
 }
 
 /**
- * @param {Physics.AABB<Physics.vec3>} aabb
- * @param {Physics.vec3} p
+ * @param {JsDyn.AABB<JsDyn.vec3>} aabb
+ * @param {JsDyn.vec3} p
  * @returns {boolean}
  */
 export function overlapsPoint(aabb, p) {
@@ -215,8 +215,8 @@ export function overlapsPoint(aabb, p) {
 }
 
 /**
- * @param {Physics.AABB<Physics.vec3>} aabb
- * @param {Physics.Ray<Physics.vec3>} r ray
+ * @param {JsDyn.AABB<JsDyn.vec3>} aabb
+ * @param {JsDyn.Ray<JsDyn.vec3>} r ray
  * @returns {boolean}
  */
 export function overlapsRay(aabb, r) {

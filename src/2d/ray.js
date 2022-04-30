@@ -1,24 +1,24 @@
 import vec2 from "../vec2.js";
 
 /**
- * @implements {Physics.Ray<Physics.vec2>}
+ * @implements {JsDyn.Ray<JsDyn.vec2>}
  */
 export class Ray {
-	/** @type {Physics.vec2} */
+	/** @type {JsDyn.vec2} */
 	origin;
-	/** @type {Physics.vec2} */
+	/** @type {JsDyn.vec2} */
 	dir;
-	/** @type {Physics.vec2} */
+	/** @type {JsDyn.vec2} */
 	invDir;
 	/** @type {number} */
 	distance;
 }
 
 /**
- * @param {Physics.ray2.vector} origin
- * @param {Physics.ray2.vector} dir
+ * @param {JsDyn.ray2.vector} origin
+ * @param {JsDyn.ray2.vector} dir
  * @param {number} maxDistance
- * @returns {Physics.ray2.Ray}
+ * @returns {JsDyn.ray2.Ray}
  */
 export function create(origin, dir, maxDistance = Number.MAX_SAFE_INTEGER) {
 	let ray = new Ray();

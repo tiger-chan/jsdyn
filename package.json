@@ -1,6 +1,6 @@
 {
-	"name": "@tiger_chan/physics",
-	"version": "0.5.0",
+	"name": "@tiger_chan/jsdyn",
+	"version": "0.1.0",
 	"description": "Simple Collision Detection implementation for JavaScript",
 	"type": "module",
 	"main": "./src/index.js",
@@ -15,7 +15,8 @@
 	"keywords": [
 		"collision",
 		"aabb",
-		"physics"
+		"physics",
+		"vector-math"
 	],
 	"devDependencies": {
 		"ava": "^4.1.0",

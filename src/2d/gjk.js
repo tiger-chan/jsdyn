@@ -7,10 +7,10 @@ const MAX_ITERATIONS = 100;
 
 /**
  * Find the support of a circle
- * @param {Physics.Circle<Physics.vec2>} shape
- * @param {Physics.vec2} dir
- * @param {Physics.vec2} dst
- * @returns {Physics.vec2}
+ * @param {JsDyn.Circle<JsDyn.vec2>} shape
+ * @param {JsDyn.vec2} dir
+ * @param {JsDyn.vec2} dst
+ * @returns {JsDyn.vec2}
  */
 export function supportCircle(shape, dir, dst = vec2.create()) {
 	return vec2.add(shape.center, vec2.scale(vec2.normalized(dir, dst), shape.radius, dst), dst);
@@ -18,11 +18,11 @@ export function supportCircle(shape, dir, dst = vec2.create()) {
 
 /**
  * Create Support function bound to the shape
- * @param {Physics.Circle<Physics.vec2>} shape
- * @returns {Physics.gjk2.Support}
+ * @param {JsDyn.Circle<JsDyn.vec2>} shape
+ * @returns {JsDyn.gjk2.Support}
  */
 export function bindSupportCircle(shape) {
-	/** @this {Physics.Circle<Physics.vec2>} */
+	/** @this {JsDyn.Circle<JsDyn.vec2>} */
 	function support(dir, dst = vec2.create()) {
 		return supportCircle(this, dir, dst);
 	}
@@ -31,10 +31,10 @@ export function bindSupportCircle(shape) {
 
 /**
  * Find the support of a circle
- * @param {Physics.Polygon<Physics.vec2>} shape
- * @param {Physics.vec2} dir
- * @param {Physics.vec2} dst
- * @returns {Physics.vec2}
+ * @param {JsDyn.Polygon<JsDyn.vec2>} shape
+ * @param {JsDyn.vec2} dir
+ * @param {JsDyn.vec2} dst
+ * @returns {JsDyn.vec2}
  */
 export function supportPolygon(shape, dir, dst = vec2.create()) {
 	let cur = 0;
@@ -51,11 +51,11 @@ export function supportPolygon(shape, dir, dst = vec2.create()) {
 
 /**
  * Create Support function bound to the shape
- * @param {Physics.Polygon<Physics.vec2>} shape
- * @returns {Physics.gjk2.Support}
+ * @param {JsDyn.Polygon<JsDyn.vec2>} shape
+ * @returns {JsDyn.gjk2.Support}
  */
 export function bindSupportPolygon(shape) {
-	/** @this {Physics.Polygon<Physics.vec2>} */
+	/** @this {JsDyn.Polygon<JsDyn.vec2>} */
 	function support(dir, dst = vec2.create()) {
 		return supportPolygon(this, dir, dst);
 	}
@@ -67,9 +67,9 @@ export function bindSupportPolygon(shape) {
  * 
  * https://math.stackexchange.com/a/51328/515228
  * 
- * @param {Physics.constVec2} a Triangle point 1
- * @param {Physics.constVec2} b Triangle point 2
- * @param {Physics.constVec2} c Triangle point 3
+ * @param {JsDyn.constVec2} a Triangle point 1
+ * @param {JsDyn.constVec2} b Triangle point 2
+ * @param {JsDyn.constVec2} c Triangle point 3
  * @returns {boolean}
  */
 function isOriginInTriangle(a, b, c) {
@@ -85,10 +85,10 @@ function isOriginInTriangle(a, b, c) {
 }
 
 /**
- * @param {Physics.vec2} a
- * @param {Physics.vec2} b
- * @param {Physics.vec2} dst
- * @returns {Physics.vec2}
+ * @param {JsDyn.vec2} a
+ * @param {JsDyn.vec2} b
+ * @param {JsDyn.vec2} dst
+ * @returns {JsDyn.vec2}
  */
 function closestPointToOrigin(a, b, dst = vec2.create()) {
 	let ab = vec2.subtract(b, a);
@@ -107,10 +107,10 @@ function closestPointToOrigin(a, b, dst = vec2.create()) {
 
 /**
  *
- * @param {Physics.ConvexShape<Physics.vec2>} s1
- * @param {Physics.ConvexShape<Physics.vec2>} s2
- * @param {Physics.vec2} dir
- * @param {Physics.gjk2.SupportPoint} supportPoint
+ * @param {JsDyn.ConvexShape<JsDyn.vec2>} s1
+ * @param {JsDyn.ConvexShape<JsDyn.vec2>} s2
+ * @param {JsDyn.vec2} dir
+ * @param {JsDyn.gjk2.SupportPoint} supportPoint
  */
 function distanceSupport(s1, s2, dir, supportPoint) {
 	const sup1 = s1.support(dir, supportPoint.spA);
@@ -120,9 +120,9 @@ function distanceSupport(s1, s2, dir, supportPoint) {
 
 /**
  * Find the closest points on the original shapes
- * @param {Physics.gjk2.SupportPoint} a
- * @param {Physics.gjk2.SupportPoint} b
- * @param {Physics.gjk2.DistanceResult} result
+ * @param {JsDyn.gjk2.SupportPoint} a
+ * @param {JsDyn.gjk2.SupportPoint} b
+ * @param {JsDyn.gjk2.DistanceResult} result
  */
 function closestPoints(a, b, result) {
 	const l = vec2.subtract(b.p, a.p);
@@ -163,7 +163,7 @@ function closestPoints(a, b, result) {
 }
 
 /**
- * @returns {Physics.gjk2.DistanceResult}
+ * @returns {JsDyn.gjk2.DistanceResult}
  */
 export function createDistanceResult() {
 	return {
@@ -175,9 +175,9 @@ export function createDistanceResult() {
 }
 
 /**
- * @param {Physics.ConvexShape<Physics.vec2>} s1
- * @param {Physics.ConvexShape<Physics.vec2>} s2
- * @returns {Physics.gjk2.DistanceState}
+ * @param {JsDyn.ConvexShape<JsDyn.vec2>} s1
+ * @param {JsDyn.ConvexShape<JsDyn.vec2>} s2
+ * @returns {JsDyn.gjk2.DistanceState}
  */
 export function createDistnaceState(s1, s2) {
 	return {
@@ -189,8 +189,8 @@ export function createDistnaceState(s1, s2) {
 }
 
 /**
- * @param {Physics.gjk2.SupportPoint} a
- * @param {Physics.gjk2.SupportPoint} dst
+ * @param {JsDyn.gjk2.SupportPoint} a
+ * @param {JsDyn.gjk2.SupportPoint} dst
  */
 function copySupportPoint(a, dst) {
 	vec2.copy(a.p, dst.p);
@@ -199,7 +199,7 @@ function copySupportPoint(a, dst) {
 }
 
 /**
- * @param {Physics.Circle<Physics.vec2> | Physics.Polygon<Physics.vec2>} shape
+ * @param {JsDyn.Circle<JsDyn.vec2> | JsDyn.Polygon<JsDyn.vec2>} shape
  * @returns {boolean}
  */
 function isCircle(shape) {
@@ -207,8 +207,8 @@ function isCircle(shape) {
 }
 
 /**
- * @param {Physics.Circle<Physics.vec2>} c1
- * @param {Physics.Circle<Physics.vec2>} c2
+ * @param {JsDyn.Circle<JsDyn.vec2>} c1
+ * @param {JsDyn.Circle<JsDyn.vec2>} c2
  * @returns {boolean}
  */
 function circleTest(c1, c2) {
@@ -220,9 +220,9 @@ function circleTest(c1, c2) {
 }
 
 /**
- * @param {Physics.Circle<Physics.vec2>} c1
- * @param {Physics.Circle<Physics.vec2>} c2
- * @param {Physics.gjk2.DistanceResult} dst
+ * @param {JsDyn.Circle<JsDyn.vec2>} c1
+ * @param {JsDyn.Circle<JsDyn.vec2>} c2
+ * @param {JsDyn.gjk2.DistanceResult} dst
  * @returns {boolean}
  */
 function circleDistance(c1, c2, dst) {
@@ -245,8 +245,8 @@ function circleDistance(c1, c2, dst) {
 }
 
 /**
- * @param {Physics.gjk2.DistanceState} state
- * @param {Physics.gjk2.DistanceResult} dst
+ * @param {JsDyn.gjk2.DistanceState} state
+ * @param {JsDyn.gjk2.DistanceResult} dst
  * @param {number} maxIterations
  * @returns {boolean}
  */
@@ -254,13 +254,13 @@ export function distance(state, dst, maxIterations = MAX_ITERATIONS) {
 	// based on description given in https://dyn4j.org/2010/04/gjk-distance-closest-points/
 
 	if (isCircle(state.shapeA.shape) && isCircle(state.shapeB.shape)) {
-		const c1 = /** @type {Physics.Circle<Physics.vec2>} */(state.shapeA.shape);
-		const c2 = /** @type {Physics.Circle<Physics.vec2>} */(state.shapeB.shape);
+		const c1 = /** @type {JsDyn.Circle<JsDyn.vec2>} */(state.shapeA.shape);
+		const c2 = /** @type {JsDyn.Circle<JsDyn.vec2>} */(state.shapeB.shape);
 		return circleDistance(c1, c2, dst);
 	}
 
 	function createSupport() {
-		/** @type {Physics.gjk2.SupportPoint} */
+		/** @type {JsDyn.gjk2.SupportPoint} */
 		const a = {
 			p: vec2.create(),
 			spA: vec2.create(),
@@ -270,15 +270,15 @@ export function distance(state, dst, maxIterations = MAX_ITERATIONS) {
 	}
 
 	// Pre allocate all of the values we are going to be using
-	/** @type {Physics.gjk2.SupportPoint} */
+	/** @type {JsDyn.gjk2.SupportPoint} */
 	let a = createSupport();
-	/** @type {Physics.gjk2.SupportPoint} */
+	/** @type {JsDyn.gjk2.SupportPoint} */
 	let b = createSupport();
-	/** @type {Physics.gjk2.SupportPoint} */
+	/** @type {JsDyn.gjk2.SupportPoint} */
 	let c = createSupport();
-	/** @type {Physics.vec2} */
+	/** @type {JsDyn.vec2} */
 	let p1 = vec2.create();
-	/** @type {Physics.vec2} */
+	/** @type {JsDyn.vec2} */
 	let p2 = vec2.create();
 
 	vec2.subtract(state.shapeB.center, state.shapeA.center, state.dir);
@@ -351,17 +351,17 @@ export function distance(state, dst, maxIterations = MAX_ITERATIONS) {
 }
 
 /**
- * @enum {Physics.gjk2.Result}
+ * @enum {JsDyn.gjk2.Result}
  */
 export const Result = {
-	working: /** @type {Physics.gjk2.Result.working} */ (0),
-	intersection: /** @type {Physics.gjk2.Result.intersection} */(1),
-	noIntersection:  /** @type {Physics.gjk2.Result.noIntersection} */(2)
+	working: /** @type {JsDyn.gjk2.Result.working} */ (0),
+	intersection: /** @type {JsDyn.gjk2.Result.intersection} */(1),
+	noIntersection:  /** @type {JsDyn.gjk2.Result.noIntersection} */(2)
 };
 
 /**
  * 
- * @param {Physics.gjk2.State} state
+ * @param {JsDyn.gjk2.State} state
  * @returns {boolean}
  */
 function addSupport(state) {
@@ -380,10 +380,10 @@ function addSupport(state) {
 
 /**
  *
- * @param {Physics.ConvexShape<Physics.vec2>} s1
- * @param {Physics.ConvexShape<Physics.vec2>} s2
- * @param {Physics.vec2} dir
- * @param {Physics.vec2} dst
+ * @param {JsDyn.ConvexShape<JsDyn.vec2>} s1
+ * @param {JsDyn.ConvexShape<JsDyn.vec2>} s2
+ * @param {JsDyn.vec2} dir
+ * @param {JsDyn.vec2} dst
  */
 export function support(s1, s2, dir, dst = vec2.create()) {
 	const sup1 = s1.support(dir);
@@ -393,15 +393,15 @@ export function support(s1, s2, dir, dst = vec2.create()) {
 
 /**
  * 
- * @param {Physics.gjk2.State} state
- * @returns {Physics.gjk2.Result}
+ * @param {JsDyn.gjk2.State} state
+ * @returns {JsDyn.gjk2.Result}
  */
 export function step(state) {
 	switch (state.simplex.length) {
 		case 0: {
 			if (isCircle(state.shapeA.shape) && isCircle(state.shapeB.shape)) {
-				const c1 = /** @type {Physics.Circle<Physics.vec2>} */(state.shapeA.shape);
-				const c2 = /** @type {Physics.Circle<Physics.vec2>} */(state.shapeB.shape);
+				const c1 = /** @type {JsDyn.Circle<JsDyn.vec2>} */(state.shapeA.shape);
+				const c2 = /** @type {JsDyn.Circle<JsDyn.vec2>} */(state.shapeB.shape);
 				return circleTest(c1, c2) ? Result.intersection : Result.noIntersection;
 			}
 
@@ -457,9 +457,9 @@ export function step(state) {
 
 /**
  * 
- * @param {Physics.ConvexShape<Physics.vec2>} s1 
- * @param {Physics.ConvexShape<Physics.vec2>} s2 
- * @returns {Physics.gjk2.State}
+ * @param {JsDyn.ConvexShape<JsDyn.vec2>} s1 
+ * @param {JsDyn.ConvexShape<JsDyn.vec2>} s2 
+ * @returns {JsDyn.gjk2.State}
  */
 export function create(s1, s2) {
 	return {
@@ -472,17 +472,17 @@ export function create(s1, s2) {
 
 /**
  * 
- * @param {Physics.ConvexShape<Physics.vec2> | Physics.gjk2.State} s1 
- * @param {Physics.ConvexShape<Physics.vec2>} s2 
+ * @param {JsDyn.ConvexShape<JsDyn.vec2> | JsDyn.gjk2.State} s1 
+ * @param {JsDyn.ConvexShape<JsDyn.vec2>} s2 
  * @returns {boolean}
  */
 export function test(s1, s2 = null) {
-	/** @type {Physics.gjk2.State} */
+	/** @type {JsDyn.gjk2.State} */
 	let state = null;
 	if (s2 == null) {
-		state = /** @type {Physics.gjk2.State} */ (s1);
+		state = /** @type {JsDyn.gjk2.State} */ (s1);
 	} else {
-		state = create(/** @type {Physics.ConvexShape<Physics.vec2>} */(s1), s2);
+		state = create(/** @type {JsDyn.ConvexShape<JsDyn.vec2>} */(s1), s2);
 	}
 
 	let result = step(state);
