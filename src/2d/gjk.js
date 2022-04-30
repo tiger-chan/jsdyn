@@ -1,6 +1,6 @@
 import math from "../math.js";
 import vec2 from "../vec2.js";
-import vec3, { tripleProduct } from "../vec3.js";
+import vec3 from "../vec3.js";
 
 const EPSILON = 0.0001;
 const MAX_ITERATIONS = 100;
@@ -102,7 +102,7 @@ function closestPointToOrigin(a, b, dst = vec2.create()) {
 
 	let t = abd / abs;
 	t = math.clamp(t, 0, 1);
-	return vec2.scaleAndAdd(a, ab, t, dst);;
+	return vec2.scaleAndAdd(a, ab, t, dst);
 }
 
 /**
@@ -193,9 +193,9 @@ export function createDistnaceState(s1, s2) {
  * @param {Physics.gjk2.SupportPoint} dst
  */
 function copySupportPoint(a, dst) {
-	vec2.copy(a.p, dst.p)
-	vec2.copy(a.spA, dst.spA)
-	vec2.copy(a.spB, dst.spB)
+	vec2.copy(a.p, dst.p);
+	vec2.copy(a.spA, dst.spA);
+	vec2.copy(a.spB, dst.spB);
 }
 
 /**
@@ -203,7 +203,7 @@ function copySupportPoint(a, dst) {
  * @returns {boolean}
  */
 function isCircle(shape) {
-	return shape.hasOwnProperty("radius");
+	return Object.prototype.hasOwnProperty.call(shape, "radius");
 }
 
 /**

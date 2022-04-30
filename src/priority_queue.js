@@ -1,9 +1,9 @@
 // From https://stackoverflow.com/a/42919752/3261668
 
 const TOP = 0;
-function get_parent(i) { return ((i + 1) >>> 1) - 1; };
-function left(i) { return (i << 1) + 1 };
-function right(i) { return (i + 1) << 1 };
+function get_parent(i) { return ((i + 1) >>> 1) - 1; }
+function left(i) { return (i << 1) + 1; }
+function right(i) { return (i + 1) << 1; }
 
 /**
  * @template T

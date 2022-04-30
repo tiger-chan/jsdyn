@@ -36,7 +36,7 @@ test("solve(box, box)", (t) => {
 		let cs1 = { center: box1.center, support: gjk.bindSupportPolygon(shape1), shape: shape1 };
 		let cs2 = { center: box2.center, support: gjk.bindSupportPolygon(shape2), shape: shape2 };
 		const gjkState = gjk.create(cs1, cs2);
-		const testResult = gjk.test(gjkState);
+		gjk.test(gjkState);
 
 		const state = epa.createState(gjkState);
 
@@ -57,7 +57,7 @@ test("solve(circle, circle)", (t) => {
 		let cs2 = { center: c2.center, support: gjk.bindSupportCircle(c2), shape: c2 };
 
 		const gjkState = gjk.create(cs1, cs2);
-		const testResult = gjk.test(gjkState);
+		gjk.test(gjkState);
 
 		const state = epa.createState(gjkState);
 
