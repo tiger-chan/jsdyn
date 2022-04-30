@@ -10,9 +10,9 @@ const EPSILON = 0.0001;
 
 /**
  * Return the absolute value of the vector in dst
- * @param {Physics.constVec2} A
- * @param {Physics.vec2} dst
- * @returns {Physics.vec2}
+ * @param {JsDyn.constVec2} A
+ * @param {JsDyn.vec2} dst
+ * @returns {JsDyn.vec2}
  */
 export function abs(A, dst = create()) {
 	dst[X] = Math.abs(A[X]);
@@ -22,19 +22,19 @@ export function abs(A, dst = create()) {
 
 /**
  * Create new vec2
- * @returns {Physics.vec2}
+ * @returns {JsDyn.vec2}
  */
 export function create(x = 0, y = 0) {
 	let a = new Array(W);
 	a[X] = x;
 	a[Y] = y;
-	return /** @type {Physics.vec2} */ (a);
+	return /** @type {JsDyn.vec2} */ (a);
 }
 
 /**
  * Clone provided vec2
- * @param {Physics.constVec2} A
- * @returns {Physics.vec2}
+ * @param {JsDyn.constVec2} A
+ * @returns {JsDyn.vec2}
  */
 export function clone(A) {
 	return create(A[X], A[Y]);
@@ -43,7 +43,7 @@ export function clone(A) {
 /**
  * Create vec2 from a array like
  * @param {ArrayLike} A
- * @returns {Physics.vec2}
+ * @returns {JsDyn.vec2}
  */
 export function from(A) {
 	if (A.length == 2) {
@@ -58,8 +58,8 @@ export function from(A) {
 /**
  * Copy `A` to `dst`
  * @param {ArrayLike} A
- * @param {Physics.vec2} [dst]
- * @returns {Physics.vec2}
+ * @param {JsDyn.vec2} [dst]
+ * @returns {JsDyn.vec2}
  */
 export function copy(A, dst = create()) {
 	dst[X] = A[X];
@@ -69,7 +69,7 @@ export function copy(A, dst = create()) {
 
 /**
  * Set the `x`, `y` components of `dst`
- * @param {Physics.vec2} dst
+ * @param {JsDyn.vec2} dst
  * @param {number} x
  * @param {number} y
  */
@@ -80,10 +80,10 @@ export function set(dst, x, y) {
 
 /**
  * Adds the respective components of `B` to `A` and returns them in `dst`
- * @param {Physics.constVec2} A
- * @param {Physics.constVec2} B
- * @param {Physics.vec2} dst
- * @returns {Physics.vec2}
+ * @param {JsDyn.constVec2} A
+ * @param {JsDyn.constVec2} B
+ * @param {JsDyn.vec2} dst
+ * @returns {JsDyn.vec2}
  */
 export function add(A, B, dst = create()) {
 	dst[X] = A[X] + B[X];
@@ -93,10 +93,10 @@ export function add(A, B, dst = create()) {
 
 /**
  * Subtracts the respective components of `B` from `A` and returns them in `dst`
- * @param {Physics.constVec2} A
- * @param {Physics.constVec2} B
- * @param {Physics.vec2} dst
- * @returns {Physics.vec2}
+ * @param {JsDyn.constVec2} A
+ * @param {JsDyn.constVec2} B
+ * @param {JsDyn.vec2} dst
+ * @returns {JsDyn.vec2}
  */
 export function subtract(A, B, dst = create()) {
 	dst[X] = A[X] - B[X];
@@ -106,10 +106,10 @@ export function subtract(A, B, dst = create()) {
 
 /**
  * Multiplies the respective components of `B` and `A` and returns them in `dst`
- * @param {Physics.constVec2} A
- * @param {Physics.constVec2} B
- * @param {Physics.vec2} dst
- * @returns {Physics.vec2}
+ * @param {JsDyn.constVec2} A
+ * @param {JsDyn.constVec2} B
+ * @param {JsDyn.vec2} dst
+ * @returns {JsDyn.vec2}
  */
 export function multiply(A, B, dst = create()) {
 	dst[X] = A[X] * B[X];
@@ -119,10 +119,10 @@ export function multiply(A, B, dst = create()) {
 
 /**
  * Divides the respective components of `B` and `A` and returns them in `dst`
- * @param {Physics.constVec2} A
- * @param {Physics.constVec2} B
- * @param {Physics.vec2} dst
- * @returns {Physics.vec2}
+ * @param {JsDyn.constVec2} A
+ * @param {JsDyn.constVec2} B
+ * @param {JsDyn.vec2} dst
+ * @returns {JsDyn.vec2}
  */
 export function divide(A, B, dst = create()) {
 	dst[X] = A[X] / B[X];
@@ -132,9 +132,9 @@ export function divide(A, B, dst = create()) {
 
 /**
  * Returns the `ceil` of each component of `A` in `dst`
- * @param {Physics.constVec2} A
- * @param {Physics.vec2} dst
- * @returns {Physics.vec2}
+ * @param {JsDyn.constVec2} A
+ * @param {JsDyn.vec2} dst
+ * @returns {JsDyn.vec2}
  */
 export function ceil(A, dst = create()) {
 	dst[X] = Math.ceil(A[X]);
@@ -144,9 +144,9 @@ export function ceil(A, dst = create()) {
 
 /**
  * Returns the `floor` of each component of `A` in `dst`
- * @param {Physics.constVec2} A
- * @param {Physics.vec2} dst
- * @returns {Physics.vec2}
+ * @param {JsDyn.constVec2} A
+ * @param {JsDyn.vec2} dst
+ * @returns {JsDyn.vec2}
  */
 export function floor(A, dst = create()) {
 	dst[X] = Math.floor(A[X]);
@@ -156,10 +156,10 @@ export function floor(A, dst = create()) {
 
 /**
  * Returns the min of each element in `A` and `B` returned in `dst`
- * @param {Physics.constVec2} A
- * @param {Physics.constVec2} B
- * @param {Physics.vec2} dst
- * @returns {Physics.vec2}
+ * @param {JsDyn.constVec2} A
+ * @param {JsDyn.constVec2} B
+ * @param {JsDyn.vec2} dst
+ * @returns {JsDyn.vec2}
  */
 export function min(A, B, dst = create()) {
 	dst[X] = Math.min(A[X], B[X]);
@@ -169,10 +169,10 @@ export function min(A, B, dst = create()) {
 
 /**
  * Returns the max of each element in `A` and `B` returned in `dst`
- * @param {Physics.constVec2} A
- * @param {Physics.constVec2} B
- * @param {Physics.vec2} dst
- * @returns {Physics.vec2}
+ * @param {JsDyn.constVec2} A
+ * @param {JsDyn.constVec2} B
+ * @param {JsDyn.vec2} dst
+ * @returns {JsDyn.vec2}
  */
 export function max(A, B, dst = create()) {
 	dst[X] = Math.max(A[X], B[X]);
@@ -182,9 +182,9 @@ export function max(A, B, dst = create()) {
 
 /**
  * Returns the `round` of each component of `A` in `dst`
- * @param {Physics.constVec2} A
- * @param {Physics.vec2} dst
- * @returns {Physics.vec2}
+ * @param {JsDyn.constVec2} A
+ * @param {JsDyn.vec2} dst
+ * @returns {JsDyn.vec2}
  */
 export function round(A, dst = create()) {
 	dst[X] = Math.round(A[X]);
@@ -194,10 +194,10 @@ export function round(A, dst = create()) {
 
 /**
  * Returns `A` scaled by `s` in `dst`
- * @param {Physics.constVec2} A
+ * @param {JsDyn.constVec2} A
  * @param {number} s
- * @param {Physics.vec2} dst
- * @returns {Physics.vec2}
+ * @param {JsDyn.vec2} dst
+ * @returns {JsDyn.vec2}
  */
 export function scale(A, s, dst = create()) {
 	dst[X] = A[X] * s;
@@ -207,11 +207,11 @@ export function scale(A, s, dst = create()) {
 
 /**
  * Returns `A` + `sB` in `dst`
- * @param {Physics.constVec2} A
- * @param {Physics.constVec2} B
+ * @param {JsDyn.constVec2} A
+ * @param {JsDyn.constVec2} B
  * @param {number} s
- * @param {Physics.vec2} dst
- * @returns {Physics.vec2}
+ * @param {JsDyn.vec2} dst
+ * @returns {JsDyn.vec2}
  */
 export function scaleAndAdd(A, B, s, dst = create()) {
 	dst[X] = A[X] + B[X] * s;
@@ -220,11 +220,11 @@ export function scaleAndAdd(A, B, s, dst = create()) {
 }
 
 /**
- * @param {Physics.constVec2} A
- * @param {Physics.constVec2} B
- * @param {Physics.constVec2} C
- * @param {Physics.vec3} dst
- * @returns {Physics.vec3}
+ * @param {JsDyn.constVec2} A
+ * @param {JsDyn.constVec2} B
+ * @param {JsDyn.constVec2} C
+ * @param {JsDyn.vec3} dst
+ * @returns {JsDyn.vec3}
  */
 export function tripleProduct(A, B, C, dst = vec3.create()) {
 	let a = vec3.from(A);
@@ -235,9 +235,9 @@ export function tripleProduct(A, B, C, dst = vec3.create()) {
 
 /**
  * Returns the `trunc` of each component of `A` in `dst`
- * @param {Physics.constVec2} A
- * @param {Physics.vec2} dst
- * @returns {Physics.vec2}
+ * @param {JsDyn.constVec2} A
+ * @param {JsDyn.vec2} dst
+ * @returns {JsDyn.vec2}
  */
 export function trunc(A, dst = create()) {
 	dst[X] = Math.trunc(A[X]);
@@ -247,8 +247,8 @@ export function trunc(A, dst = create()) {
 
 /**
  * Returns the distnace between `A` and `B`
- * @param {Physics.constVec2} A
- * @param {Physics.constVec2} B
+ * @param {JsDyn.constVec2} A
+ * @param {JsDyn.constVec2} B
  * @returns {number}
  */
 export function distance(A, B) {
@@ -257,8 +257,8 @@ export function distance(A, B) {
 
 /**
  * Returns the square distnace between `A` and `B`
- * @param {Physics.constVec2} A
- * @param {Physics.constVec2} B
+ * @param {JsDyn.constVec2} A
+ * @param {JsDyn.constVec2} B
  * @returns {number}
  */
 export function squaredDistance(A, B) {
@@ -270,7 +270,7 @@ export function squaredDistance(A, B) {
 
 /**
  * Returns the magnitude of `A`
- * @param {Physics.constVec2} A
+ * @param {JsDyn.constVec2} A
  * @returns {number}
  */
 export function magnitude(A) {
@@ -279,7 +279,7 @@ export function magnitude(A) {
 
 /**
  * Returns the square magnitude of `A`
- * @param {Physics.constVec2} A
+ * @param {JsDyn.constVec2} A
  * @returns {number}
  */
 export function magnitudeSquared(A) {
@@ -289,7 +289,7 @@ export function magnitudeSquared(A) {
 
 /**
  * Returns the magnitude of `A`
- * @param {Physics.constVec2} A
+ * @param {JsDyn.constVec2} A
  * @returns {number}
  */
 export function length(A) {
@@ -298,7 +298,7 @@ export function length(A) {
 
 /**
  * Returns the square magnitude of `A`
- * @param {Physics.constVec2} A
+ * @param {JsDyn.constVec2} A
  * @returns {number}
  */
 export function lengthSquared(A) {
@@ -308,9 +308,9 @@ export function lengthSquared(A) {
 
 /**
  * Returns the negative of `A` in `dst`
- * @param {Physics.constVec2} A
- * @param {Physics.vec2} dst
- * @returns {Physics.vec2}
+ * @param {JsDyn.constVec2} A
+ * @param {JsDyn.vec2} dst
+ * @returns {JsDyn.vec2}
  */
 export function negate(A, dst = create()) {
 	dst[X] = -A[X];
@@ -320,9 +320,9 @@ export function negate(A, dst = create()) {
 
 /**
  * Returns the inverse of `A` in `dst`
- * @param {Physics.constVec2} A
- * @param {Physics.vec2} dst
- * @returns {Physics.vec2}
+ * @param {JsDyn.constVec2} A
+ * @param {JsDyn.vec2} dst
+ * @returns {JsDyn.vec2}
  */
 export function inverse(A, dst = create()) {
 	dst[X] = 1.0 / A[X];
@@ -332,8 +332,8 @@ export function inverse(A, dst = create()) {
 
 /**
  * Returns `A` normalized in `dst`
- * @param {Physics.constVec2} A
- * @param {Physics.vec2} dst
+ * @param {JsDyn.constVec2} A
+ * @param {JsDyn.vec2} dst
  * @returns {number}
  */
 export function normalize(A, dst = create()) {
@@ -348,9 +348,9 @@ export function normalize(A, dst = create()) {
 
 /**
  * Returns `A` normalized in stored in `dst`
- * @param {Physics.constVec2} A
- * @param {Physics.vec2} dst
- * @returns {Physics.vec2}
+ * @param {JsDyn.constVec2} A
+ * @param {JsDyn.vec2} dst
+ * @returns {JsDyn.vec2}
  */
 export function normalized(A, dst = create()) {
 	return normalize(A, dst), dst;
@@ -358,8 +358,8 @@ export function normalized(A, dst = create()) {
 
 /**
  * Returns `A` dot `B`
- * @param {Physics.constVec2} A
- * @param {Physics.constVec2} B
+ * @param {JsDyn.constVec2} A
+ * @param {JsDyn.constVec2} B
  * @returns {number}
  */
 export function dot(A, B) {
@@ -372,8 +372,8 @@ export function dot(A, B) {
 
 /**
  * Returns `A` x `B` in `dst`
- * @param {Physics.constVec2} A
- * @param {Physics.constVec2} B
+ * @param {JsDyn.constVec2} A
+ * @param {JsDyn.constVec2} B
  * @returns {number}
  */
 export function cross(A, B) {
@@ -382,11 +382,11 @@ export function cross(A, B) {
 
 /**
  * Lerp between `A` to `B` where `t` is between [0, 1] returns result in `dst`
- * @param {Physics.constVec2} A
- * @param {Physics.constVec2} B
+ * @param {JsDyn.constVec2} A
+ * @param {JsDyn.constVec2} B
  * @param {number} t
- * @param {Physics.vec2} dst
- * @returns {Physics.vec2}
+ * @param {JsDyn.vec2} dst
+ * @returns {JsDyn.vec2}
  */
 export function lerp(A, B, t, dst = create()) {
 	let x = A[X];
@@ -399,8 +399,8 @@ export function lerp(A, B, t, dst = create()) {
 /**
  * Returns a random vector with `s` scale in `dst`
  * @param {number} s
- * @param {Physics.vec2} dst
- * @return {Physics.vec2}
+ * @param {JsDyn.vec2} dst
+ * @return {JsDyn.vec2}
  */
 export function random(s, dst = create()) {
 	// TODO: come up with a more interesting random?
@@ -411,11 +411,11 @@ export function random(s, dst = create()) {
 
 /**
  * Rotates `A` with origin `O` by `rad` returned in `dst`
- * @param {Physics.constVec2} A
- * @param {Physics.constVec2} O
+ * @param {JsDyn.constVec2} A
+ * @param {JsDyn.constVec2} O
  * @param {number} rad
- * @param {Physics.vec2} dst
- * @return {Physics.vec2}
+ * @param {JsDyn.vec2} dst
+ * @return {JsDyn.vec2}
  */
 export function rotate(A, O, rad, dst = create()) {
 	let s = Math.sin(rad);
@@ -429,8 +429,8 @@ export function rotate(A, O, rad, dst = create()) {
 
 /**
  * Returns angle between `A` and `B` in radians
- * @param {Physics.constVec2} A
- * @param {Physics.constVec2} B
+ * @param {JsDyn.constVec2} A
+ * @param {JsDyn.constVec2} B
  * @returns {number}
  */
 export function angle(A, B) {
@@ -443,13 +443,13 @@ export function angle(A, B) {
 
 /**
  * Zero Vector
- * @type {Physics.constVec2}
+ * @type {JsDyn.constVec2}
  */
 export const zero = create();
 
 /**
  * Returns the string representation of `A`
- * @param {Physics.constVec2} A
+ * @param {JsDyn.constVec2} A
  * ```js
  * "(x, y)"
  * ```
@@ -460,8 +460,8 @@ export function toString(A) {
 
 /**
  * Strict equality test of `A` === `B`
- * @param {Physics.constVec2} A
- * @param {Physics.constVec2} B
+ * @param {JsDyn.constVec2} A
+ * @param {JsDyn.constVec2} B
  * @returns {boolean}
  */
 export function exactEquals(A, B) {
@@ -470,8 +470,8 @@ export function exactEquals(A, B) {
 
 /**
  * Compare approximate equality of `A` and `B` given margin of error `epsilon`
- * @param {Physics.vec2} A
- * @param {Physics.vec2} B
+ * @param {JsDyn.vec2} A
+ * @param {JsDyn.vec2} B
  * @param {number} epsilon
  * @returns {boolean}
  */
@@ -483,7 +483,7 @@ export function equals(A, B, epsilon = EPSILON) {
 
 /**
  * Check if this vector is a zero vector (approximately)
- * @param {Physics.constVec2} A
+ * @param {JsDyn.constVec2} A
  * @param {number} epsilon
  * @returns {boolean}
  */

@@ -48,9 +48,9 @@ test("solve(box, box)", (t) => {
 
 test("solve(circle, circle)", (t) => {
 	{
-		/** @type {Physics.Circle<Physics.vec2>} */
+		/** @type {JsDyn.Circle<JsDyn.vec2>} */
 		const c1 = { center: [0, 0], radius: 1 };
-		/** @type {Physics.Circle<Physics.vec2>} */
+		/** @type {JsDyn.Circle<JsDyn.vec2>} */
 		const c2 = { center: [1, 0], radius: 1 };
 
 		let cs1 = { center: c1.center, support: gjk.bindSupportCircle(c1), shape: c1 };

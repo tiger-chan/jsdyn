@@ -1,4 +1,4 @@
-# Contributing to PYSICS-JS
+# Contributing to JsDyn
 We love your input! We want to make contributing to this project as easy and transparent as possible, whether it's:
 
 - Reporting a bug
@@ -40,7 +40,7 @@ We use GitHub issues to track public bugs. Report a bug by [opening a new issue]
 
 ## Use a Consistent Coding Style
 
-* You can try running `npx eslint` for style unification
+* You can try running `npx eslint .` for style unification
 
 ## License
 By contributing, you agree that your contributions will be licensed under its MIT License.

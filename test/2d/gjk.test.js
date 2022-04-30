@@ -81,9 +81,9 @@ test("test(box, box)", (t) => {
 
 test("test(circle, circle)", (t) => {
 	{
-		/** @type {Physics.Circle<Physics.vec2>} */
+		/** @type {JsDyn.Circle<JsDyn.vec2>} */
 		const c1 = { center: [0, 0], radius: 1 };
-		/** @type {Physics.Circle<Physics.vec2>} */
+		/** @type {JsDyn.Circle<JsDyn.vec2>} */
 		const c2 = { center: [1, 0], radius: 1 };
 		let cs1 = { center: c1.center, support: gjk.bindSupportCircle(c1), shape: c1 };
 		let cs2 = { center: c2.center, support: gjk.bindSupportCircle(c2), shape: c2 };
@@ -92,9 +92,9 @@ test("test(circle, circle)", (t) => {
 	}
 
 	{
-		/** @type {Physics.Circle<Physics.vec2>} */
+		/** @type {JsDyn.Circle<JsDyn.vec2>} */
 		const c1 = { center: [0, 0], radius: 1 };
-		/** @type {Physics.Circle<Physics.vec2>} */
+		/** @type {JsDyn.Circle<JsDyn.vec2>} */
 		const c2 = { center: [2.01, 0], radius: 1 };
 		let cs1 = { center: c1.center, support: gjk.bindSupportCircle(c1), shape: c1 };
 		let cs2 = { center: c2.center, support: gjk.bindSupportCircle(c2), shape: c2 };
@@ -103,9 +103,9 @@ test("test(circle, circle)", (t) => {
 	}
 
 	{
-		/** @type {Physics.Circle<Physics.vec2>} */
+		/** @type {JsDyn.Circle<JsDyn.vec2>} */
 		const c1 = { center: [0, 0], radius: 1 };
-		/** @type {Physics.Circle<Physics.vec2>} */
+		/** @type {JsDyn.Circle<JsDyn.vec2>} */
 		const c2 = { center: [2, 0], radius: 1.1 };
 		let cs1 = { center: c1.center, support: gjk.bindSupportCircle(c1), shape: c1 };
 		let cs2 = { center: c2.center, support: gjk.bindSupportCircle(c2), shape: c2 };
@@ -116,7 +116,7 @@ test("test(circle, circle)", (t) => {
 
 test("test(box, circle)", (t) => {
 	{
-		/** @type {Physics.Circle<Physics.vec2>} */
+		/** @type {JsDyn.Circle<JsDyn.vec2>} */
 		const c1 = { center: [0, 0], radius: 1 };
 		const box1 = aabb.create([0.0, 0.0], [1, 1]);
 
@@ -129,7 +129,7 @@ test("test(box, circle)", (t) => {
 	}
 
 	{
-		/** @type {Physics.Circle<Physics.vec2>} */
+		/** @type {JsDyn.Circle<JsDyn.vec2>} */
 		const c1 = { center: [2.01, 0], radius: 1 };
 		const box1 = aabb.create([0.0, 0.0], [1, 1]);
 
@@ -141,7 +141,7 @@ test("test(box, circle)", (t) => {
 	}
 
 	{
-		/** @type {Physics.Circle<Physics.vec2>} */
+		/** @type {JsDyn.Circle<JsDyn.vec2>} */
 		const c1 = { center: [2.01, 0], radius: 1.01 };
 		const box1 = aabb.create([0.0, 0.0], [1, 1]);
 
@@ -154,7 +154,7 @@ test("test(box, circle)", (t) => {
 	}
 
 	{
-		/** @type {Physics.Circle<Physics.vec2>} */
+		/** @type {JsDyn.Circle<JsDyn.vec2>} */
 		const c1 = { center: [2.0, 2.0], radius: Math.sqrt(2.0) };
 		const box1 = aabb.create([0.0, 0.0], [1, 1]);
 
@@ -167,7 +167,7 @@ test("test(box, circle)", (t) => {
 	}
 
 	{
-		/** @type {Physics.Circle<Physics.vec2>} */
+		/** @type {JsDyn.Circle<JsDyn.vec2>} */
 		const c1 = { center: [2, 2.01], radius: Math.sqrt(2.0) };
 		const box1 = aabb.create([0.0, 0.0], [1, 1]);
 
@@ -246,9 +246,9 @@ test("distance(box, box)", (t) => {
 
 test("distnace(circle, circle)", (t) => {
 	{
-		/** @type {Physics.Circle<Physics.vec2>} */
+		/** @type {JsDyn.Circle<JsDyn.vec2>} */
 		const c1 = { center: [0, 0], radius: 1 };
-		/** @type {Physics.Circle<Physics.vec2>} */
+		/** @type {JsDyn.Circle<JsDyn.vec2>} */
 		const c2 = { center: [1, 0], radius: 1 };
 
 		let cs1 = { center: c1.center, support: gjk.bindSupportCircle(c1), shape: c1 };
@@ -262,9 +262,9 @@ test("distnace(circle, circle)", (t) => {
 	}
 
 	{
-		/** @type {Physics.Circle<Physics.vec2>} */
+		/** @type {JsDyn.Circle<JsDyn.vec2>} */
 		const c1 = { center: [0, 0], radius: 1 };
-		/** @type {Physics.Circle<Physics.vec2>} */
+		/** @type {JsDyn.Circle<JsDyn.vec2>} */
 		const c2 = { center: [2.01, 0], radius: 1 };
 
 		let cs1 = { center: c1.center, support: gjk.bindSupportCircle(c1), shape: c1 };
@@ -281,9 +281,9 @@ test("distnace(circle, circle)", (t) => {
 	}
 
 	{
-		/** @type {Physics.Circle<Physics.vec2>} */
+		/** @type {JsDyn.Circle<JsDyn.vec2>} */
 		const c1 = { center: [0, 0], radius: 1 };
-		/** @type {Physics.Circle<Physics.vec2>} */
+		/** @type {JsDyn.Circle<JsDyn.vec2>} */
 		const c2 = { center: [2, 0], radius: 1.1 };
 
 		let cs1 = { center: c1.center, support: gjk.bindSupportCircle(c1), shape: c1 };

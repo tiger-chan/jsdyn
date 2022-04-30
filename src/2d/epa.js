@@ -7,11 +7,11 @@ const EPSILON = 0.0001;
 const ROT_90 = Math.PI / 2;
 
 /**
- * @param {Physics.constVec2} p1
- * @param {Physics.constVec2} p2
- * @param {Physics.constVec2} normal
+ * @param {JsDyn.constVec2} p1
+ * @param {JsDyn.constVec2} p2
+ * @param {JsDyn.constVec2} normal
  * @param {number} distance
- * @returns {Physics.epa.Edge}
+ * @returns {JsDyn.epa.Edge}
  */
 function createEdge(p1 = vec2.create(), p2 = vec2.create(), normal = vec2.create(), distance = 0) {
 	return {
@@ -23,10 +23,10 @@ function createEdge(p1 = vec2.create(), p2 = vec2.create(), normal = vec2.create
 }
 
 /**
- * @param {Physics.constVec2} p1
- * @param {Physics.constVec2} p2
- * @param {Physics.epa.Winding} winding
- * @returns {Physics.epa.Edge}
+ * @param {JsDyn.constVec2} p1
+ * @param {JsDyn.constVec2} p2
+ * @param {JsDyn.epa.Winding} winding
+ * @returns {JsDyn.epa.Edge}
  */
 function buildEdge(p1 = vec2.create(), p2 = vec2.create(), winding = 0) {
 	let norm = vec2.subtract(p2, p1);
@@ -46,7 +46,7 @@ function buildEdge(p1 = vec2.create(), p2 = vec2.create(), winding = 0) {
 }
 
 /**
- * @returns {Physics.epa.Result}
+ * @returns {JsDyn.epa.Result}
  */
 function create(depth = 0, normal = vec2.create()) {
 	return {
@@ -57,9 +57,9 @@ function create(depth = 0, normal = vec2.create()) {
 
 /**
  * 
- * @param {Physics.epa.State} state 
- * @param {Physics.epa.Edge} dst
- * @returns {Physics.epa.Edge}
+ * @param {JsDyn.epa.State} state 
+ * @param {JsDyn.epa.Edge} dst
+ * @returns {JsDyn.epa.Edge}
  */
 function findNearestEdge(state, dst = createEdge()) {
 	let edge = state.polytope.peek();
@@ -78,8 +78,8 @@ function findNearestEdge(state, dst = createEdge()) {
  * creating two new edges
  * 
  * `a` -> `b` transforms to `a` -> `p` -> `b`
- * @param {Physics.epa.State} state
- * @param {Physics.vec2} point
+ * @param {JsDyn.epa.State} state
+ * @param {JsDyn.vec2} point
  */
 function expandPolytope(state, point) {
 	const edge = state.polytope.pop();
@@ -89,8 +89,8 @@ function expandPolytope(state, point) {
 }
 
 /**
- * @param {Physics.gjk2.State} state
- * @returns {Physics.epa.Winding}
+ * @param {JsDyn.gjk2.State} state
+ * @returns {JsDyn.epa.Winding}
  */
 function determineWinding(state) {
 	for (let i = 0; i < state.simplex.length; ++i) {
@@ -99,19 +99,19 @@ function determineWinding(state) {
 		let b = state.simplex[j];
 		let cross = vec2.cross(a, b);
 		if (cross > 0) {
-			return /** @type {Physics.epa.Winding.ccw} */(1);
+			return /** @type {JsDyn.epa.Winding.ccw} */(1);
 		} else if (cross < 0) {
-			return /** @type {Physics.epa.Winding.cw} */(0);
+			return /** @type {JsDyn.epa.Winding.cw} */(0);
 		}
 	}
 
-	return /** @type {Physics.epa.Winding.ccw} */(1);
+	return /** @type {JsDyn.epa.Winding.ccw} */(1);
 }
 
 /**
  *
- * @param {Physics.gjk2.State} state
- * @returns {Physics.epa.State}
+ * @param {JsDyn.gjk2.State} state
+ * @returns {JsDyn.epa.State}
  */
 export function createState(state) {
 	const winding = determineWinding(state);
@@ -123,7 +123,7 @@ export function createState(state) {
 		queue.push(buildEdge(a, b, winding));
 	}
 
-	/** @type {Physics.epa.State} */
+	/** @type {JsDyn.epa.State} */
 	return {
 		dir: vec2.create(),
 		polytope: queue,
@@ -134,7 +134,7 @@ export function createState(state) {
 }
 
 /**
- * @param {Physics.Circle<Physics.vec2> | Physics.Polygon<Physics.vec2>} shape
+ * @param {JsDyn.Circle<JsDyn.vec2> | JsDyn.Polygon<JsDyn.vec2>} shape
  * @returns {boolean}
  */
 function isCircle(shape) {
@@ -142,10 +142,10 @@ function isCircle(shape) {
 }
 
 /**
- * @param {Physics.Circle<Physics.vec2>} c1
- * @param {Physics.Circle<Physics.vec2>} c2
- * @param {Physics.epa.Result} dst
- * @returns {Physics.epa.Result}
+ * @param {JsDyn.Circle<JsDyn.vec2>} c1
+ * @param {JsDyn.Circle<JsDyn.vec2>} c2
+ * @param {JsDyn.epa.Result} dst
+ * @returns {JsDyn.epa.Result}
  */
 function circleSolve(c1, c2, dst) {
 	const dir = vec2.subtract(c2.center, c1.center);
@@ -160,16 +160,16 @@ function circleSolve(c1, c2, dst) {
 
 /**
  * 
- * @param {Physics.epa.State} state
- * @param {Physics.epa.Result} dst
+ * @param {JsDyn.epa.State} state
+ * @param {JsDyn.epa.Result} dst
  * @param {number} maxiterations
  * @param {number} epsilon
- * @returns {Physics.epa.Result}
+ * @returns {JsDyn.epa.Result}
  */
 export function solve(state, dst = create(), maxiterations = MAX_ITERATION, epsilon = EPSILON) {
 	if (isCircle(state.shapeA.shape) && isCircle(state.shapeB.shape)) {
-		const c1 = /** @type {Physics.Circle<Physics.vec2>} */(state.shapeA.shape);
-		const c2 = /** @type {Physics.Circle<Physics.vec2>} */(state.shapeB.shape);
+		const c1 = /** @type {JsDyn.Circle<JsDyn.vec2>} */(state.shapeA.shape);
+		const c2 = /** @type {JsDyn.Circle<JsDyn.vec2>} */(state.shapeB.shape);
 		return circleSolve(c1, c2, dst);
 	}
 

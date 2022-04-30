@@ -1,6 +1,6 @@
-export = Physics;
-export as namespace Physics;
-export default Physics;
+export = JsDyn;
+export as namespace JsDyn;
+export default JsDyn;
 
 type Tuple<T, N extends number> = N extends N ? number extends N ? T[] : _TupleOf<T, N, []> : never;
 type _TupleOf<T, N extends number, R extends unknown[]> = R['length'] extends N ? R : _TupleOf<T, N, [T, ...R]>;
@@ -15,7 +15,7 @@ class PriorityQueue<T> {
 	replace(value: T): T;
 }
 
-declare namespace Physics {
+declare namespace JsDyn {
 	export type vec2 = [number, number];
 	export type constVec2 = readonly [number, number];
 	export type vec3 = [number, number, number];
@@ -522,10 +522,10 @@ declare namespace Physics {
 
 	export module aabb2 {
 		type vector = vec2;
-		export type AxisAlignedBoundingBox = Physics.AxisAlignedBoundingBox<vector>;
-		export type AABB = Physics.AABB<vector>;
-		type Ray = Physics.Ray<vector>;
-		type HitResult = Physics.HitResult<vector>;
+		export type AxisAlignedBoundingBox = JsDyn.AxisAlignedBoundingBox<vector>;
+		export type AABB = JsDyn.AABB<vector>;
+		type Ray = JsDyn.Ray<vector>;
+		type HitResult = JsDyn.HitResult<vector>;
 		/**
 		 * Create new AABB with center and extents
 		 */
@@ -591,10 +591,10 @@ declare namespace Physics {
 
 	export module aabb3 {
 		type vector = vec3;
-		export type AxisAlignedBoundingBox = Physics.AxisAlignedBoundingBox<vector>;
-		export type AABB = Physics.AABB<vector>;
-		type Ray = Physics.Ray<vector>;
-		type HitResult = Physics.HitResult<vector>;
+		export type AxisAlignedBoundingBox = JsDyn.AxisAlignedBoundingBox<vector>;
+		export type AABB = JsDyn.AABB<vector>;
+		type Ray = JsDyn.Ray<vector>;
+		type HitResult = JsDyn.HitResult<vector>;
 		/**
 		 * Create new AABB with center and extents
 		 */
@@ -664,14 +664,14 @@ declare namespace Physics {
 
 	export module ray2 {
 		type vector = vec2;
-		export type Ray = Physics.Ray<vector>;
+		export type Ray = JsDyn.Ray<vector>;
 
 		export function create(origin: vector, dir: vector, maxDistance?: number): Ray;
 	}
 
 	export module ray3 {
 		type vector = vec3;
-		export type Ray = Physics.Ray<vector>;
+		export type Ray = JsDyn.Ray<vector>;
 
 		export function create(origin: vector, dir: vector, maxDistance?: number): Ray;
 	}
@@ -693,12 +693,12 @@ declare namespace Physics {
 
 	export module gjk2 {
 		type Support = (dir: vec2, dst?: vec2) => vec2;
-		type Polygon = Physics.Polygon<vec2>;
-		export function supportCircle(shape: Physics.Circle<vec2>, dir: vec2, dst?: vec2): vec2;
-		export function supportPolygon(shape: Physics.Polygon<vec2>, dir: vec2, dst?: vec2): vec2;
+		type Polygon = JsDyn.Polygon<vec2>;
+		export function supportCircle(shape: JsDyn.Circle<vec2>, dir: vec2, dst?: vec2): vec2;
+		export function supportPolygon(shape: JsDyn.Polygon<vec2>, dir: vec2, dst?: vec2): vec2;
 
-		export function bindSupportCircle(shape: Physics.Circle<vec2>): Support;
-		export function bindSupportPolygon(shape: Physics.Polygon<vec2>): Support;
+		export function bindSupportCircle(shape: JsDyn.Circle<vec2>): Support;
+		export function bindSupportPolygon(shape: JsDyn.Polygon<vec2>): Support;
 
 		export interface DistanceState {
 			shapeA: ConvexShape<vec2>;
