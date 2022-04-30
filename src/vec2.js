@@ -3,7 +3,6 @@ import MathEx from "./math.js";
 
 const X = 0;
 const Y = 1;
-const Z = 2;
 // Vector Size
 const W = 2;
 

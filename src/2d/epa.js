@@ -40,7 +40,7 @@ function buildEdge(p1 = vec2.create(), p2 = vec2.create(), winding = 0) {
 			break;
 		}
 	}
-	norm = vec2.normalized(norm)
+	norm = vec2.normalized(norm);
 
 	return createEdge(p1, p2, norm, Math.abs(vec2.dot(p1, norm)));
 }
@@ -138,7 +138,7 @@ export function createState(state) {
  * @returns {boolean}
  */
 function isCircle(shape) {
-	return shape.hasOwnProperty("radius");
+	return Object.prototype.hasOwnProperty.call(shape, "radius");
 }
 
 /**
