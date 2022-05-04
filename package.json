@@ -6,7 +6,8 @@
 	"main": "./src/index.js",
 	"types": "./types/index.d.ts",
 	"scripts": {
-		"test": "ava"
+		"test": "ava",
+		"docs": "npx typedoc"
 	},
 	"repository": {
 		"type": "git",
@@ -20,7 +21,8 @@
 	],
 	"devDependencies": {
 		"ava": "^4.1.0",
-		"eslint": "^8.10.0"
+		"eslint": "^8.10.0",
+		"typedoc": "^0.22.15"
 	},
 	"directories": {
 		"doc": "docs"
