@@ -7,6 +7,7 @@
 	"types": "./types/index.d.ts",
 	"scripts": {
 		"test": "ava",
+		"test-junit": "npx ava --tap | npx tap-junit --output output/",
 		"docs": "npx typedoc"
 	},
 	"repository": {
@@ -22,6 +23,7 @@
 	"devDependencies": {
 		"ava": "^4.1.0",
 		"eslint": "^8.10.0",
+		"tap-junit": "^5.0.2",
 		"typedoc": "^0.22.15"
 	},
 	"directories": {
@@ -36,6 +38,5 @@
 		"url": "https://github.com/tiger-chan/jsdyn/issues"
 	},
 	"homepage": "https://github.com/tiger-chan/jsdyn#readme",
-	"ava": {
-	}
+	"ava": {}
 }
