@@ -1,6 +1,6 @@
 {
 	"name": "@tiger-chan/jsdyn",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"description": "Simple Collision Detection implementation for JavaScript",
 	"type": "module",
 	"main": "./src/index.js",
