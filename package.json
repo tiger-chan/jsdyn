@@ -6,9 +6,8 @@
 	"main": "./src/index.js",
 	"types": "./types/index.d.ts",
 	"scripts": {
-		"test": "ava",
-		"test-junit": "npx ava --tap | npx tap-junit --output output/",
-		"docs": "npx typedoc"
+		"docs": "npx typedoc",
+		"test": "ava"
 	},
 	"repository": {
 		"type": "git",
