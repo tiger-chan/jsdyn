@@ -179,7 +179,7 @@ export function solve(state, dst = create(), maxiterations = MAX_ITERATION, epsi
 		let edge = findNearestEdge(state);
 		gjk2.support(state.shapeA, state.shapeB, edge.normal, point);
 		const projection = vec2.dot(point, edge.normal);
-		const dist = projection - edge.distance;
+		const dist = Math.abs(projection - edge.distance);
 		if (dist < epsilon) {
 			// break here since the point isn't far enough
 			// in the direction of the edge normal

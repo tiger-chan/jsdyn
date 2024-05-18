@@ -406,6 +406,9 @@ export function step(state) {
 			}
 
 			vec2.subtract(state.shapeB.center, state.shapeA.center, state.dir);
+			if (vec2.isZero(state.dir)) {
+				state.dir = vec2.create(1,0);
+			}
 			break;
 		}
 		case 1: {
